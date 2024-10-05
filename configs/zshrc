@@ -1,0 +1,52 @@
+# Lines configured by zsh-newuser-install
+bindkey -e
+# End of lines configured by zsh-newuser-install
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' '+m:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+r:|[._- ]=** r:|=**' '+l:|=* r:|=*'
+zstyle ':completion:*' menu select=0
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+NPM_PACKAGES="$HOME/.npm-packages"
+
+MY_PATH="$HOME/.local/bin:$NPM_PACKAGES/bin:$HOME/.local/share/npm/bin"
+
+PATH="$PATH:$MY_PATH"
+export PATH
+
+export HISTSIZE=10000
+export SAVEHIST=10000
+export LSP_USE_PLISTS=true
+# Preserve MANPATH if you already defined it somewhere in your config.
+# Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+
+setopt nonomatch
+setopt COMPLETE_IN_WORD
+
+# Alias
+alias ls="eza --icons auto"
+
+#Theme
+source ~/.config/zsh/felux.zsh-theme
+autoload -U colors
+colors
+
+#Configure autosuggestions
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+#ZSH_AUTOSUGGEST_COMPLETION_IGNORE="\["
+#ZSH_AUTOSUGGEST_HISTORY_IGNORE="\["
+
+#Must be at last
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
