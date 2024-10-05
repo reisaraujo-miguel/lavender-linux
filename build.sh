@@ -71,7 +71,7 @@ rm kitty-$KITTY_VERSION-x86_64.txz
 
 #--- Configure desktop ---#
 
-FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux-os/raw/refs/heads/main
+FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux/raw/refs/heads/main
 
 #### Configure Kitty ####
 
