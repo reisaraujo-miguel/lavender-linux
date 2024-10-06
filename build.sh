@@ -54,6 +54,8 @@ sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
 
 
 #--- Install non rpm packages ---#
+HOME='/etc/skel'
+
 # Create /usr/local folder
 rm /usr/local
 mkdir -p /usr/local
@@ -65,8 +67,9 @@ wget https://github.com/kovidgoyal/kitty/releases/download/v$KITTY_VERSION/kitty
 tar -xvf kitty-$KITTY_VERSION-x86_64.txz --directory=/usr/local --skip-old-files
 rm kitty-$KITTY_VERSION-x86_64.txz
 
+# Install LunarVim
 
-# TODO: Install LunarVim
+LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh) -y --install-dependencies
 
 
 #--- Configure desktop ---#
