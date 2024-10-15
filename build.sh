@@ -37,6 +37,9 @@ INSTALL_PACKAGE_LIST="neovim cargo" # cargo is a LunarVim dependency
 #### Install some packages necessary for LSP ####
 INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST clang-tools-extra"
 
+#### Install Git Delta ####
+INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST git-delta"
+
 #### Install kitty-terminfo ####
 INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST kitty-terminfo"
 
