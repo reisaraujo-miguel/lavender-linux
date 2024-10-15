@@ -91,7 +91,7 @@ setopt nonomatch
 setopt COMPLETE_IN_WORD
 
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.config/zsh/themes/catppuccin.zsh-theme
+source ~/.config/zsh/catppuccin.zsh-theme
 
 autoload -U colors && colors
 
