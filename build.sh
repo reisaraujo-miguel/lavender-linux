@@ -112,4 +112,4 @@ rm -r catppuccin-kde
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshrc -o /etc/skel/.zshrc
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
 mkdir -p /etc/skel/.config/zsh
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/felux.zsh-theme -o /etc/skel/.config/zsh/felux.zsh-theme
+curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/catppuccin.zsh-theme -o /etc/skel/.config/zsh/catppuccin.zsh-theme
