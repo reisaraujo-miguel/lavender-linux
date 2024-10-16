@@ -23,6 +23,7 @@ skip_global_compinit=1
 setopt noglobalrcs
 
 export SYSTEM=$(uname -s)
+export SHELL=/bin/zsh
 
 if [[ ("$SHLVL" -eq 1 && ! -o LOGIN) && -s "${ZDOTDIR:-$HOME/.config/zsh}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME/.config/zsh}/.zprofile"
