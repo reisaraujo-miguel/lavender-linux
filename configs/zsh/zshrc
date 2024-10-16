@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-bindkey -e
-
-#----------------------------------------------------------#
-
 # Load and initialize the completion system ignoring insecure directories with a
 # cache time of 20 hours, so it should almost always regenerate the first time a
 # shell is opened each day.
@@ -53,7 +49,7 @@ setopt nonomatch
 export ZSHCONFIG=${ZDOTDIR:-$HOME/.config/zsh}/.zsh
 
 ZSH_THEME="catppuccin"
-source ~/.config/zsh/themes/catppuccin.zsh-theme
+source ~/.config/zsh/theme/catppuccin.zsh-theme
 
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 

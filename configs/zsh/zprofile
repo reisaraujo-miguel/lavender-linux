@@ -22,5 +22,5 @@ path=(
 )
 
 # eliminates duplicates in *paths
-typeset -gU cdpath fpath path
+typeset -gU cdpath fpath path PATH
 

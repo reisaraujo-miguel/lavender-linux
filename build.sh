@@ -113,7 +113,7 @@ curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
 
 mkdir -p /etc/skel/.config/zsh/theme
 
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/theme/catppuccin.zsh-theme -o /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
+curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/themes/catppuccin.zsh-theme -o /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogin -o /etc/skel/.config/zsh/.zlogin
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogout -o /etc/skel/.config/zsh/.zlogout
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zprofile -o /etc/skel/.config/zsh/.zprofile
