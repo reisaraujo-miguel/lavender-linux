@@ -41,10 +41,10 @@ if [[ "${terminfo[colors]}" -ge 256 ]]; then
 	fg_overlay0="%F{$overlay0}"
     bg_overlay0="%K{$overlay0}"
     	
-	# Subtext0
-	subtext0="#a5adcb"
-	fg_subtext0="%F{$subtext0}"
-	bg_subtext0="%K{$subtext0}"	
+	# Suboverlay10
+	suboverlay10="#a5adcb"
+	fg_suboverlay10="%F{$suboverlay10}"
+	bg_suboverlay10="%K{$suboverlay10}"	
 
 	# Red
 	red="#ed8796"
@@ -61,10 +61,10 @@ if [[ "${terminfo[colors]}" -ge 256 ]]; then
 	fg_green="%F{$green}"
     bg_green="%K{$green}"
 
-	# Text
-	text="#cad3f5"
-	fg_text="%F{$text}"
-	bg_text="%K{$text}"
+	# Overlay1
+	overlay1="#8087a2"
+	fg_overlay1="%F{$overlay1}"
+	bg_overlay1="%K{$overlay1}"
 else
 	# Mauve
 	mauve="purple"
@@ -81,10 +81,10 @@ else
 	fg_overlay0="%F{$overlay0}"
     bg_overlay0="%K{$overlay0}"
     	
-	# Subtext0
-	subtext0="white"
-	fg_subtext0="%F{$subtext0}"
-	bg_subtext0="%K{$subtext0}"	
+	# Suboverlay10
+	suboverlay10="white"
+	fg_suboverlay10="%F{$suboverlay10}"
+	bg_suboverlay10="%K{$suboverlay10}"	
 
 	# Red
 	red="red"
@@ -101,10 +101,10 @@ else
 	fg_green="%F{$green}"
     bg_green="%K{$green}"
 
-	# Text
-	text="white"
-	fg_text="%F{$text}"
-	bg_text="%K{$text}"
+	# overlay1
+	overlay1="white"
+	fg_overlay1="%F{$overlay1}"
+	bg_overlay1="%K{$overlay1}"
 fi
 
 # Reset color.
@@ -112,13 +112,13 @@ reset_fg="%f"
 reset_bg="%k"
 
 # VCS style formats.
-FMT_UNTRACKED="%{$reset_background%} %{$fg_red%}%{$reset_text%} "
+FMT_UNTRACKED="%{$reset_background%} %{$fg_red%}%{$reset_overlay1%} "
 FMT_UNSTAGED="%{$reset_fg%} %{$fg_yellow%} "
 FMT_STAGED="%{$reset_fg%} %{$fg_green%} "
 
 FMT_ACTION="(%{$fg_green%}%a%{$reset_fg%})"
 
-FMT_VCS_STATUS="%{$fg_subtext0%}  %b%u%c%{$reset_fg%}"
+FMT_VCS_STATUS="%{$fg_suboverlay10%}  %b%u%c%{$reset_fg%}"
 
 zstyle ':vcs_info:*' enable git svn
 zstyle ':vcs_info:*' check-for-changes true
@@ -148,7 +148,7 @@ DIR=$'%{$bg_overlay0%}%{$fg_crust%} %B %1~%b%{$reset_bg%}%{$fg_overlay0%}%
 
 GIT_INFO=$'%B${vcs_info_msg_0_}%b'
 
-INPUT_LINE=$'\n%(?.%{$fg_text%}.%{$fg_red%})%(!.#.$)%{$reset_fg%} '
+INPUT_LINE=$'\n%(?.%{$fg_overlay1%}.%{$fg_red%})%(!.󱗒 .)%{$reset_fg%} '
 
 PROMPT="${USER_NAME}${DIR}${GIT_INFO}${INPUT_LINE}"
 
