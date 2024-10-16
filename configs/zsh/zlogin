@@ -16,7 +16,7 @@
 	# zcompile .zshrc
     zrecompile -pq ${ZDOTDIR:-${HOME/.config/zsh}}/.zshrc
     zrecompile -pq ${ZDOTDIR:-${HOME/.config/zsh}}/.zprofile
-    zrecompile -pq ${ZDOTDIR:-${HOME/.config/zsh}}/.zshenv
+    zrecompile -pq ${HOME}/.zshenv
     
 	# recompile all zsh or sh
     for f in $ZSHCONFIG/**/*.*sh

@@ -109,6 +109,9 @@ rm -r catppuccin-kde
 
 
 #### configure zsh ####
+rm /etc/skel/.zshrc
+rm /etc/skel/.zprofile
+
 curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
 
 mkdir -p /etc/skel/.config/zsh/theme
