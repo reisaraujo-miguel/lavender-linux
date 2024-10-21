@@ -5,30 +5,32 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  ARCH: x86_64
+  IMAGE_NAME: felux
+  IMAGE_REPO: ghcr.io/reisaraujo-miguel
+  IMAGE_TAG: latest
+  VERSION: ${{ github.sha }}
+  VARIANT: Kinoite
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: fedora:latest
-      options: --privileged
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        dnf install -y git xorriso genisoimage syslinux
-
-    - name: Clone isogenerator
-      run: |
-        git clone https://github.com/ublue-os/isogenerator.git
-        cd isogenerator
-        chmod +x isogenerator.sh
-
     - name: Build ISO
-      run: |
-        cd isogenerator
-        sudo ./isogenerator.sh ghcr.io/reisaraujo-miguel/felux:latest
+      uses: jasonn3/build-container-installer@main
+      id: build
+      with:
+        arch: ${{ env.ARCH }}
+        image_name: ${{ env.IMAGE_NAME }}
+        image_repo: ${{ env.IMAGE_REPO }}
+        image_tag: ${{ env.IMAGE_TAG }}
+        version: ${{ env.VERSION }}
+        variant: ${{ env.VARIANT }}
+        iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}-${{ env.VERSION }}.iso
 
     - name: Get ISO version
       id: iso_version
@@ -53,6 +55,16 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./isogenerator/fedora-felux-x86_64.iso
-        asset_name: felux-${{ steps.iso_version.outputs.version }}.iso
+        asset_path: ${{ steps.build.outputs.iso_path }}
+        asset_name: ${{ steps.build.outputs.iso_name }}
         asset_content_type: application/octet-stream
+
+    - name: Upload ISO Checksum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+        asset_name: ${{ steps.build.outputs.iso_name }}-CHECKSUM
+        asset_content_type: text/plain
