@@ -17,13 +17,14 @@ jobs:
 
     - name: Install dependencies
       run: |
-        rpm-ostree install git isogenerator
+        rpm-ostree install git xorriso genisoimage syslinux
         rpm-ostree ex apply-live --allow-replacement
 
     - name: Clone isogenerator
       run: |
         git clone https://github.com/ublue-os/isogenerator.git
         cd isogenerator
+        chmod +x isogenerator.sh
 
     - name: Build ISO
       run: |
@@ -34,7 +35,7 @@ jobs:
       id: iso_version
       run: |
         ISO_VERSION=$(date +"%Y%m%d")
-        echo "::set-output name=version::$ISO_VERSION"
+        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
 
     - name: Create Release
       id: create_release
