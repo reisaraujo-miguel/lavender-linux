@@ -43,7 +43,6 @@ jobs:
       uses: jasonn3/build-container-installer@main
       id: build
       with:
-        additional_templates: /github/workspace/build.tmpl
         arch: ${{ env.ARCH }}
         image_name: ${{ env.IMAGE_NAME }}
         image_repo: ${{ env.IMAGE_REPO }}
