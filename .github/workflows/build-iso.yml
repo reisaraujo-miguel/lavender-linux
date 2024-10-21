@@ -8,6 +8,14 @@ on:
       - completed
   workflow_dispatch:
 
+env:
+  ARCH: x86_64
+  IMAGE_NAME: felux
+  IMAGE_REPO: ghcr.io/reisaraujo-miguel
+  IMAGE_TAG: latest
+  VERSION: "40"
+  VARIANT: Kinoite
+
 jobs:
   build:
     runs-on: ubuntu-latest
