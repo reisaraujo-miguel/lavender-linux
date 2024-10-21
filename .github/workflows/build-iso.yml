@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: felux
   IMAGE_REPO: ghcr.io/reisaraujo-miguel
   IMAGE_TAG: latest
-  VERSION: "39"  # Use the latest Fedora version
+  VERSION: latest  # Use the latest Fedora version
   VARIANT: Kinoite
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
         image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
-        iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}-${{ env.VERSION }}.iso
+        iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}.iso
         enable_cache_dnf: "true"
         enable_cache_skopeo: "false"
         enable_flatpak_dependencies: "true"
