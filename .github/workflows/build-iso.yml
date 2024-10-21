@@ -50,6 +50,9 @@ jobs:
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
         iso_name: ${{ env.IMAGE_NAME }}-v${{ steps.iso_version.outputs.version }}.iso
+        flatpak_remote_name: flathub
+        flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
+        flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4

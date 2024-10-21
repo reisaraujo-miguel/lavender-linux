@@ -4,6 +4,21 @@ set -ouex pipefail
 
 RELEASE="$(rpm -E %fedora)"
 
+#--- Branding ---#
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/lib/os-release
+sed -i 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /usr/lib/os-release
+sed -i 's/Aurora/Felux/' /usr/lib/os-release
+sed -i 's/aurora-dx/felux/' /usr/lib/os-release
+sed -i 's/aurora/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /etc/yafti.yml
+
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+
+sed -i 's/Aurora-dx/Felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
 
 #--- Remove unwanted software ---#
 
@@ -49,6 +64,8 @@ INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST zsh-autosuggestions zsh-syntax-highl
 #### Package for flatpak Steam ####
 INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST steam-devices" # Coders also game
 
+#### cli utilities ####
+INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST eza"
 
 #### Actually install packages ####
 sed -i "s/^enabled=.*/enabled=1/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
