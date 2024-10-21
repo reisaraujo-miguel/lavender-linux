@@ -23,14 +23,30 @@ jobs:
     - name: Build ISO
       uses: jasonn3/build-container-installer@v1.2.2
       id: build
+      continue-on-error: true  # This allows the workflow to continue even if this step fails
       with:
         arch: ${{ env.ARCH }}
         image_name: ${{ env.IMAGE_NAME }}
         image_repo: ${{ env.IMAGE_REPO }}
-        #image_tag: ${{ env.IMAGE_TAG }}
+        image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
-        #variant: ${{ env.VARIANT }}
+        variant: ${{ env.VARIANT }}
         iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}-${{ env.VERSION }}.iso
+        enable_cache_dnf: true
+        enable_cache_skopeo: false
+        enable_flatpak_dependencies: true
+        enrollment_password: container-installer
+        flatpak_remote_name: flathub
+        flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
+        image_signed: true
+        rootfs_size: 2
+        web_ui: false
+
+    - name: Check build status
+      if: steps.build.outcome == 'failure'
+      run: |
+        echo "ISO build failed. Please check the logs for more information."
+        exit 1
 
     - name: Get ISO version
       id: iso_version
