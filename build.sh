@@ -34,6 +34,7 @@ sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
 sed -i 's/aurora-dx/felux/' /usr/share/ublue-os/image-info.json
 sed -i 's/ublue-os\/aurora-dx/reisaraujo-miguel\/felux/' /usr/share/ublue-os/image-info.json
 
+ls /
 
 #--- Remove unwanted software ---#
 rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
