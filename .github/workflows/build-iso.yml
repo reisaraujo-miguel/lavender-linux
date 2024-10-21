@@ -17,8 +17,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        rpm-ostree install git xorriso genisoimage syslinux
-        rpm-ostree ex apply-live --allow-replacement
+        dnf install -y git xorriso genisoimage syslinux
 
     - name: Clone isogenerator
       run: |
