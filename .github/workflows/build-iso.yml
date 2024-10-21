@@ -48,15 +48,6 @@ jobs:
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
         iso_name: ${{ env.IMAGE_NAME }}-v${{ steps.iso_version.outputs.version }}.iso
-        enable_cache_dnf: "true"
-        enable_cache_skopeo: "false"
-        enable_flatpak_dependencies: "true"
-        enrollment_password: "container-installer"
-        flatpak_remote_name: "flathub"
-        flatpak_remote_url: "https://flathub.org/repo/flathub.flatpakrepo"
-        image_signed: "true"
-        rootfs_size: "2"
-        web_ui: "false"
 
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4
