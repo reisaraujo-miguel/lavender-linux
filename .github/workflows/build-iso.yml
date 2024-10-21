@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: felux
   IMAGE_REPO: ghcr.io/reisaraujo-miguel
   IMAGE_TAG: latest
-  VERSION: ${{ github.sha }}
+  VERSION: latest
   VARIANT: Kinoite
 
 jobs:
