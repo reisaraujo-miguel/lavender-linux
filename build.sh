@@ -23,8 +23,6 @@ sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
 sed -i 's/aurora-dx/felux/' /usr/share/ublue-os/image-info.json
 sed -i 's/ublue-os\/aurora-dx/reisaraujo-miguel\/felux/' /usr/share/ublue-os/image-info.json
 
-ls /
-
 #--- Remove unwanted software ---#
 
 #### All my homies use neovim ####
@@ -91,7 +89,7 @@ mkdir -p /usr/local
 
 
 #--- Configure desktop ---#
-FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux/raw/refs/heads/main
+BUILD_FILES_DIR="/tmp/build_files"
 
 #### Configure Kitty ####
 
@@ -101,8 +99,8 @@ curl -L https://github.com/DinkDonk/kitty-icon/blob/main/kitty-dark.png?raw=true
 
 # Add kitty default config and Catppuccin-Mocha theme
 mkdir -p /etc/skel/.config/kitty
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/kitty.conf -o /etc/skel/.config/kitty/kitty.conf
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/current-theme.conf -o /etc/skel/.config/kitty/current-theme.conf
+cp $BUILD_FILES_DIR/configs/kitty.conf /etc/skel/.config/kitty/kitty.conf
+cp $BUILD_FILES_DIR/configs/current-theme.conf /etc/skel/.config/kitty/current-theme.conf
 
 # Make kitty the default terminal
 sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
@@ -114,7 +112,7 @@ sed -i 's/org\.gnome\.Ptyxis\.desktop/kitty.desktop/g' /usr/share/plasma/plasmoi
 #### Configure Global Theme ####
 git clone --depth=1 https://github.com/catppuccin/kde catppuccin-kde
 cd catppuccin-kde
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/scripts/install-catppuccin-theme.sh -o ./install.sh
+cp $BUILD_FILES_DIR/scripts/install-catppuccin-theme.sh ./install.sh
 ./install.sh 2 4 1
 cd ..
 rm -r catppuccin-kde
@@ -122,12 +120,12 @@ rm -r catppuccin-kde
 #### configure zsh ####
 rm /etc/skel/.zshrc
 rm /etc/skel/.zprofile
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
+cp $BUILD_FILES_DIR/configs/zshenv /etc/skel/.zshenv
 
 mkdir -p /etc/skel/.config/zsh/theme
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/themes/catppuccin.zsh-theme -o /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
+cp $BUILD_FILES_DIR/configs/zsh/themes/catppuccin.zsh-theme /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
 
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogin -o /etc/skel/.config/zsh/.zlogin
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogout -o /etc/skel/.config/zsh/.zlogout
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zprofile -o /etc/skel/.config/zsh/.zprofile
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zshrc -o /etc/skel/.config/zsh/.zshrc
+cp $BUILD_FILES_DIR/configs/zsh/zlogin /etc/skel/.config/zsh/.zlogin
+cp $BUILD_FILES_DIR/configs/zsh/zlogout /etc/skel/.config/zsh/.zlogout
+cp $BUILD_FILES_DIR/configs/zsh/zprofile /etc/skel/.config/zsh/.zprofile
+cp $BUILD_FILES_DIR/configs/zsh/zshrc /etc/skel/.config/zsh/.zshrc
