@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This is required for creating releases
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
         image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
-        iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}.iso
+        iso_name: ${{ env.IMAGE_NAME }}.iso
         enable_cache_dnf: "true"
         enable_cache_skopeo: "false"
         enable_flatpak_dependencies: "true"
@@ -50,11 +50,12 @@ jobs:
         echo "Build step outputs:"
         echo "${{ toJson(steps.build.outputs) }}"
 
-    - name: Check build status
-      if: steps.build.outcome != 'success'
-      run: |
-        echo "ISO build failed. Please check the logs for more information."
-        exit 1
+    - name: Upload ISO as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: felux-iso
+        path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
+        if-no-files-found: error
 
     - name: Get ISO version
       id: iso_version
@@ -68,10 +69,18 @@ jobs:
       with:
         tag_name: v${{ steps.iso_version.outputs.version }}
         name: Felux ISO v${{ steps.iso_version.outputs.version }}
+        body: |
+          Felux ISO v${{ steps.iso_version.outputs.version }} (Based on Fedora ${{ env.VERSION }})
+          
+          The ISO file is available as a GitHub Actions artifact due to file size limitations.
+          Please download the artifact from the Actions tab of this repository.
+          
+          Checksum file is attached to this release.
+          
+          ISO Filename: ${{ steps.build.outputs.iso_name }}
         draft: false
         prerelease: false
         files: |
-          ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
           ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
