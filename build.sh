@@ -130,6 +130,7 @@ cp $BUILD_FILES_DIR/configs/zsh/zlogout /etc/skel/.config/zsh/.zlogout
 cp $BUILD_FILES_DIR/configs/zsh/zprofile /etc/skel/.config/zsh/.zprofile
 cp $BUILD_FILES_DIR/configs/zsh/zshrc /etc/skel/.config/zsh/.zshrc
 
+mkdir -p /etc/wallpaper
 cp $BUILD_FILES_DIR/wallpaper/cat-wallpaper.jpg /etc/wallpaper/cat-wallpaper.jpg
 echo "[Containments][1][Wallpaper][org.kde.image][General]" >> /etc/skel/.config/plasmarc
 echo "Image=/etc/wallpaper/cat-wallpaper.jpg" >> /etc/skel/.config/plasmarc
