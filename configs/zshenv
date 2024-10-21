@@ -20,8 +20,6 @@ export LEIN_HOME="$XDG_DATA_HOME/lein"
 # https://blog.patshead.com/2011/04/improve-your-oh-my-zsh-startup-time-maybe.html
 skip_global_compinit=1
 
-setopt noglobalrcs
-
 export SYSTEM=$(uname -s)
 export SHELL=/bin/zsh
 

@@ -4,29 +4,10 @@ set -ouex pipefail
 
 RELEASE="$(rpm -E %fedora)"
 
-#--- Branding ---#
-sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/lib/os-release
-sed -i 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' /usr/lib/os-release
-
-sed -i 's/Aurora-dx/Felux/' /usr/lib/os-release
-sed -i 's/Aurora/Felux/' /usr/lib/os-release
-sed -i 's/aurora-dx/felux/' /usr/lib/os-release
-sed -i 's/aurora/felux/' /usr/lib/os-release
-
-sed -i 's/Aurora-dx/Felux/' /etc/yafti.yml
-
-sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
-
-sed -i 's/Aurora-dx/Felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
-sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
-
 #--- Remove unwanted software ---#
 
 #### All my homies use neovim ####
 REMOVE_PACKAGE_LIST="code"
-
-rm /etc/profile.d/vscode-bluefin-profile.sh
-rm -r /etc/skel/.config/Code/
 
 #### Remove Ptyxis ####
 # I don't like software redundancy. Kitty will be de default terminal,
@@ -77,58 +58,10 @@ sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
 #HOME='/etc/skel'
 
 # Create /usr/local folder
-rm /usr/local
-mkdir -p /usr/local
+#rm /usr/local
+#mkdir -p /usr/local
 
 # Install LunarVim
 
 #LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh) -y --install-dependencies
 
-
-#--- Configure desktop ---#
-
-FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux/raw/refs/heads/main
-
-#### Configure Kitty ####
-
-# Change kitty icon
-mkdir -p /usr/local/share/icons/hicolor/256x256/apps/
-curl -L https://github.com/DinkDonk/kitty-icon/blob/main/kitty-dark.png?raw=true -o /usr/local/share/icons/hicolor/256x256/apps/kitty.png
-
-# Add kitty default config and Catppuccin-Mocha theme
-mkdir -p /etc/skel/.config/kitty
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/kitty.conf -o /etc/skel/.config/kitty/kitty.conf
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/current-theme.conf -o /etc/skel/.config/kitty/current-theme.conf
-
-# Make kitty the default terminal
-sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
-sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
-
-# Change pinned terminal to kitty
-sed -i 's/org\.gnome\.Ptyxis\.desktop/kitty.desktop/g' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml
-
-
-#### Configure Global Theme ####
-git clone --depth=1 https://github.com/catppuccin/kde catppuccin-kde
-cd catppuccin-kde
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/scripts/install-catppuccin-theme.sh -o ./install.sh
-./install.sh 2 4 1
-
-cd ..
-rm -r catppuccin-kde
-
-
-#### configure zsh ####
-rm /etc/skel/.zshrc
-rm /etc/skel/.zprofile
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
-
-mkdir -p /etc/skel/.config/zsh/theme
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/themes/catppuccin.zsh-theme -o /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogin -o /etc/skel/.config/zsh/.zlogin
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogout -o /etc/skel/.config/zsh/.zlogout
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zprofile -o /etc/skel/.config/zsh/.zprofile
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zshrc -o /etc/skel/.config/zsh/.zshrc
