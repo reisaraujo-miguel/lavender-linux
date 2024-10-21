@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: quay.io/fedora-ostree-desktops/kinoite:latest
+      image: registry.fedoraproject.org/fedora-kinoite:latest
       options: --privileged
 
     steps:
