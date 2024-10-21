@@ -1,23 +1,21 @@
+---
 name: Build and Release Felux ISO
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-env:
-  ARCH: x86_64
-  IMAGE_NAME: felux
-  IMAGE_REPO: ghcr.io/reisaraujo-miguel
-  IMAGE_TAG: latest
-  VERSION: "40"
-  VARIANT: Kinoite
+  workflow_run:
+    workflows: ["build-image"]
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event != 'schedule'
     permissions:
       contents: write
+      actions: read
 
     steps:
     - uses: actions/checkout@v4
@@ -43,19 +41,24 @@ jobs:
         rootfs_size: "2"
         web_ui: "false"
 
-    - name: Debug Output
-      if: always()
-      run: |
-        echo "Build step outcome: ${{ steps.build.outcome }}"
-        echo "Build step outputs:"
-        echo "${{ toJson(steps.build.outputs) }}"
-
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v3
       with:
         name: felux-iso
         path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
         if-no-files-found: error
+
+    - name: Get Artifact URL
+      id: get_artifact_url
+      run: |
+        ARTIFACT_ID=$(curl -sL \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
+          | jq '.artifacts[] | select(.name=="felux-iso") | .id')
+        
+        ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/felux-iso"
+        echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
     - name: Get ISO version
       id: iso_version
@@ -73,7 +76,10 @@ jobs:
           Felux ISO v${{ steps.iso_version.outputs.version }} (Based on Fedora ${{ env.VERSION }})
           
           The ISO file is available as a GitHub Actions artifact due to file size limitations.
-          Please download the artifact from the Actions tab of this repository.
+          
+          [Download ISO Artifact](${{ steps.get_artifact_url.outputs.artifact_url }})
+          
+          Note: You need to be logged in to GitHub to download the artifact.
           
           Checksum file is attached to this release.
           
