@@ -15,6 +15,26 @@ BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
 
 "$BRANDING_SCRIPT"
 
+#--- Branding ---#
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/lib/os-release
+sed -i 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /usr/lib/os-release
+sed -i 's/Aurora/Felux/' /usr/lib/os-release
+sed -i 's/aurora-dx/felux/' /usr/lib/os-release
+sed -i 's/aurora/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /etc/yafti.yml
+
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+sed -i 's/Aurora-DX/Felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+
+sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
+
+sed -i 's/aurora-dx/felux/' /usr/share/ublue-os/image-info.json
+sed -i 's/ublue-os\/aurora-dx/reisaraujo-miguel\/felux/' /usr/share/ublue-os/image-info.json
+
+
 #--- Remove unwanted software ---#
 rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
 rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
