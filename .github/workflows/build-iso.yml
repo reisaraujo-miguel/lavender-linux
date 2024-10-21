@@ -1,0 +1,58 @@
+name: Build and Release Felux ISO
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/fedora-ostree-desktops/kinoite:latest
+      options: --privileged
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        rpm-ostree install git isogenerator
+        rpm-ostree ex apply-live --allow-replacement
+
+    - name: Clone isogenerator
+      run: |
+        git clone https://github.com/ublue-os/isogenerator.git
+        cd isogenerator
+
+    - name: Build ISO
+      run: |
+        cd isogenerator
+        sudo ./isogenerator.sh ghcr.io/reisaraujo-miguel/felux:latest
+
+    - name: Get ISO version
+      id: iso_version
+      run: |
+        ISO_VERSION=$(date +"%Y%m%d")
+        echo "::set-output name=version::$ISO_VERSION"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.iso_version.outputs.version }}
+        release_name: Felux ISO v${{ steps.iso_version.outputs.version }}
+        draft: false
+        prerelease: false
+
+    - name: Upload ISO
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./isogenerator/fedora-felux-x86_64.iso
+        asset_name: felux-${{ steps.iso_version.outputs.version }}.iso
+        asset_content_type: application/octet-stream
