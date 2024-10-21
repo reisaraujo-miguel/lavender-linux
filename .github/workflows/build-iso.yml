@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: felux
   IMAGE_REPO: ghcr.io/reisaraujo-miguel
   IMAGE_TAG: latest
-  VERSION: latest
+  VERSION: "39"  # Use the latest Fedora version
   VARIANT: Kinoite
 
 jobs:
@@ -23,7 +23,6 @@ jobs:
     - name: Build ISO
       uses: jasonn3/build-container-installer@v1.2.2
       id: build
-      continue-on-error: true  # This allows the workflow to continue even if this step fails
       with:
         arch: ${{ env.ARCH }}
         image_name: ${{ env.IMAGE_NAME }}
@@ -32,18 +31,25 @@ jobs:
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
         iso_name: ${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}-${{ env.VERSION }}.iso
-        enable_cache_dnf: true
-        enable_cache_skopeo: false
-        enable_flatpak_dependencies: true
-        enrollment_password: container-installer
-        flatpak_remote_name: flathub
-        flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
-        image_signed: true
-        rootfs_size: 2
-        web_ui: false
+        enable_cache_dnf: "true"
+        enable_cache_skopeo: "false"
+        enable_flatpak_dependencies: "true"
+        enrollment_password: "container-installer"
+        flatpak_remote_name: "flathub"
+        flatpak_remote_url: "https://flathub.org/repo/flathub.flatpakrepo"
+        image_signed: "true"
+        rootfs_size: "2"
+        web_ui: "false"
+
+    - name: Debug Output
+      if: always()
+      run: |
+        echo "Build step outcome: ${{ steps.build.outcome }}"
+        echo "Build step outputs:"
+        echo "${{ toJson(steps.build.outputs) }}"
 
     - name: Check build status
-      if: steps.build.outcome == 'failure'
+      if: steps.build.outcome != 'success'
       run: |
         echo "ISO build failed. Please check the logs for more information."
         exit 1
@@ -71,7 +77,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.build.outputs.iso_path }}
+        asset_path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
         asset_name: ${{ steps.build.outputs.iso_name }}
         asset_content_type: application/octet-stream
 
@@ -81,6 +87,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+        asset_path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
         asset_name: ${{ steps.build.outputs.iso_name }}-CHECKSUM
         asset_content_type: text/plain
