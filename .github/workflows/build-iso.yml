@@ -6,6 +6,8 @@ on:
     workflows: ["build-image"]
     types:
       - completed
+    branches:
+      - main
   workflow_dispatch:
 
 env:
