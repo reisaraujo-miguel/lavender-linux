@@ -7,7 +7,7 @@ export RELEASE="$(rpm -E %fedora)"
 export BUILD_FILES_DIR="/tmp/build_files"
 
 #--- Branding ---#
-exec $BUILD_FILES_DIR/scripts/branding.sh
+eval $BUILD_FILES_DIR/scripts/branding.sh
 
 #--- Remove unwanted software ---#
 rm /etc/profile.d/vscode-bluefin-profile.sh
@@ -34,11 +34,11 @@ mkdir -p /usr/local
 
 #--- Configure desktop ---#
 
-exec $BUILD_FILES_DIR/scripts/configure-kitty.sh
+eval $BUILD_FILES_DIR/scripts/configure-kitty.sh
 
-exec $BUILD_FILES_DIR/scripts/configure-theme.sh
+eval $BUILD_FILES_DIR/scripts/configure-theme.sh
 
-exec $BUILD_FILES_DIR/scripts/configure-zsh.sh
+eval $BUILD_FILES_DIR/scripts/configure-zsh.sh
 
-exec $BUILD_FILES_DIR/scripts/set-wallpaper.sh
+eval $BUILD_FILES_DIR/scripts/set-wallpaper.sh
 
