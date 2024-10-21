@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: registry.fedoraproject.org/fedora-kinoite:latest
+      image: fedora:latest
       options: --privileged
 
     steps:
