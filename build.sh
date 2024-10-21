@@ -82,8 +82,8 @@ sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
 #HOME='/etc/skel'
 
 # Create /usr/local folder
-#rm /usr/local
-#mkdir -p /usr/local
+rm /usr/local
+mkdir -p /usr/local
 
 # Install LunarVim
 
