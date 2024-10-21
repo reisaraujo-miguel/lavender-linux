@@ -2,6 +2,7 @@
 
 set -ouex pipefail
 
+<<<<<<< HEAD
 if [ "$EUID" -ne 0 ]; then
     echo "Error: This script must be run as root"
     exit 1
@@ -75,3 +76,24 @@ check_and_modify "/usr/share/ublue-os/image-info.json" "ublue-os\/aurora-dx" "re
 check_and_modify "/usr/share/applications/system-update.desktop" "Aurora" "Felux"
 check_and_modify "/usr/share/ublue-os/motd/tips/10-tips.md" "Aurora" "Felux"
 check_and_modify "/usr/libexec/ublue-flatpak-manager" "Aurora" "Felux"
+=======
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/lib/os-release
+sed -i 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /usr/lib/os-release
+sed -i 's/Aurora/Felux/' /usr/lib/os-release
+sed -i 's/aurora-dx/felux/' /usr/lib/os-release
+sed -i 's/aurora/felux/' /usr/lib/os-release
+
+sed -i 's/Aurora-dx/Felux/' /etc/yafti.yml
+
+sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+sed -i 's/Aurora-DX/Felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
+
+sed -i 's/aurora-dx/felux/' /usr/share/ublue-os/image-info.json
+sed -i 's/ublue-os\/aurora-dx/reisaraujo-miguel\/felux/' /usr/share/ublue-os/image-info.json
+
+sed -i 's@Aurora@Felux@g' /usr/share/applications/system-update.desktop
+sed -i 's@Aurora@Felux@g' /usr/share/ublue-os/motd/tips/10-tips.md
+sed -i 's@Aurora@Felux@g' /usr/libexec/ublue-flatpak-manager
+>>>>>>> 8b7d316 (refactor)
