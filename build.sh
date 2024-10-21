@@ -40,8 +40,8 @@ INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST clang-tools-extra"
 #### Install Git Delta ####
 INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST git-delta"
 
-#### Install kitty-terminfo ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST kitty-terminfo"
+#### Install kitty ####
+INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST kitty"
 
 #### Install zsh packages ####
 INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST zsh-autosuggestions zsh-syntax-highlighting"
@@ -63,13 +63,6 @@ sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
 rm /usr/local
 mkdir -p /usr/local
 
-#### Install Kitty ####
-KITTY_VERSION="0.36.4"
-
-wget https://github.com/kovidgoyal/kitty/releases/download/v$KITTY_VERSION/kitty-$KITTY_VERSION-x86_64.txz
-tar -xvf kitty-$KITTY_VERSION-x86_64.txz --directory=/usr/local --skip-old-files
-rm kitty-$KITTY_VERSION-x86_64.txz
-
 # Install LunarVim
 
 #LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh) -y --install-dependencies
@@ -82,6 +75,7 @@ FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux/raw/refs/he
 #### Configure Kitty ####
 
 # Change kitty icon
+mkdir -p /usr/local/share/icons/hicolor/256x256/apps/
 curl -L https://github.com/DinkDonk/kitty-icon/blob/main/kitty-dark.png?raw=true -o /usr/local/share/icons/hicolor/256x256/apps/kitty.png
 
 # Add kitty default config and Catppuccin-Mocha theme
