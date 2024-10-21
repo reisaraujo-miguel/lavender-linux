@@ -22,7 +22,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
+    
+    - name: Get ISO version
+      id: iso_version
+      run: |
+        ISO_VERSION=$(date +"%Y%m%d")
+        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
+    
     - name: Build ISO
       uses: jasonn3/build-container-installer@v1.2.2
       id: build
@@ -33,7 +39,7 @@ jobs:
         image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
-        iso_name: ${{ env.IMAGE_NAME }}.iso
+        iso_name: ${{ env.IMAGE_NAME }}-v${{ steps.iso_version.outputs.version }}.iso
         enable_cache_dnf: "true"
         enable_cache_skopeo: "false"
         enable_flatpak_dependencies: "true"
@@ -47,7 +53,7 @@ jobs:
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: felux-iso
+        name: felux-v${{ steps.iso_version.outputs.version }}
         path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
         if-no-files-found: error
 
@@ -58,16 +64,10 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
-          | jq '.artifacts[] | select(.name=="felux-iso") | .id')
+          | jq '.artifacts[] | select(.name=="felux-v${{ steps.iso_version.outputs.version }}") | .id')
         
-        ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/felux-iso"
+        ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/felux-v${{ steps.iso_version.outputs.version }}"
         echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
-
-    - name: Get ISO version
-      id: iso_version
-      run: |
-        ISO_VERSION=$(date +"%Y%m%d")
-        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
