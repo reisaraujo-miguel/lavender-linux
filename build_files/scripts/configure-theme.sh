@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-git clone --depth=1 https://github.com/catppuccin/kde-catppuccin-kde
+git clone --depth=1 https://github.com/catppuccin/kde catppuccin-kde
 
 cd catppuccin-kde
 
