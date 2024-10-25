@@ -17,17 +17,10 @@ check_command_exists "sed"
 check_command_exists "unzip"
 check_command_exists "/usr/bin/lookandfeeltool"
 
-<<<<<<< HEAD
 COLORDIR="/usr/share/color-schemes"
 AURORAEDIR="/usr/share/aurorae/themes"
 LOOKANDFEELDIR="/usr/share/plasma/look-and-feel"
 CURSORDIR="/usr/share/icons"
-=======
-COLORDIR="/usr/local/share/color-schemes"
-AURORAEDIR="/usr/local/share/aurorae/themes"
-LOOKANDFEELDIR="/usr/local/share/plasma/look-and-feel"
-CURSORDIR="/usr/local/share/icons"
->>>>>>> fc85c01 (stop downloading build files)
 
 echo "Creating theme directories.."
 mkdir -p "$COLORDIR" "$AURORAEDIR" "$LOOKANDFEELDIR" "$CURSORDIR"
@@ -452,7 +445,6 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
 
     if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
 		
-<<<<<<< HEAD
 		if [ ! -f /etc/skel/.config/kdeglobals ]; then
 		  mkdir -p /etc/skel/.config
 		  touch /etc/skel/.config/kdeglobals
@@ -462,13 +454,6 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
 		fi
 		sed -i "/^\[KDE\]/,/^\[/ { /^LookAndFeelPackage=/d }" /etc/skel/.config/kdeglobals
 		sed -i "/^\[KDE\]/a LookAndFeelPackage=$GLOBALTHEMENAME" /etc/skel/.config/kdeglobals
-=======
-		echo "[General]" >> /etc/skel/.config/kdeglobals
-		echo "ColorScheme=$GLOBALTHEMENAME" >> /etc/skel/.config/kdeglobals
-
-		echo "[KSplash]" >> /etc/skel/.config/ksplashrc
-		echo "Theme=$GLOBALTHEMENAME" >> /etc/skel/.config/ksplashrc
->>>>>>> fc85c01 (stop downloading build files)
 
 		# Some legacy apps still look in ~/.icons
         cat <<EOF
