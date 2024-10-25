@@ -48,11 +48,6 @@ setopt nonomatch
 
 export ZSHCONFIG=${ZDOTDIR:-$HOME/.config/zsh}/.zsh
 
-ZSH_THEME="catppuccin"
-source ~/.config/zsh/theme/catppuccin.zsh-theme
-
-source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 # Standard style used by default for 'list-colors'
 LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'}
 
@@ -272,14 +267,7 @@ export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 
 #----------------------------------------------------------#
 
-# Alias
-alias tcd=testcode
-alias leak-check='valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s'
-alias compile="gcc -Og -ggdb -Wunused-result -Wall -Werror -Wextra"
-alias compile++="g++ -Og -ggdb -Wunused-result -Wall -Werror -Wextra"
 alias ls="eza --icons auto"
-alias elisp="emacs -x"
-alias ff="flatpak run org.mozilla.firefox -p im_leug"
 
 #----------------------------------------------------------#
 
@@ -287,11 +275,10 @@ echo -ne "\033]0;${USER}@${HOST}\007"
 
 #----------------------------------------------------------#
 
-if [ -f /opt/ros/humble/setup.zsh ]; then
-	source /opt/ros/humble/setup.zsh
-fi
+ZSH_THEME="catppuccin"
+source ~/.config/zsh/theme/catppuccin.zsh-theme
 
-#----------------------------------------------------------#
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Configure autosuggestions
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
