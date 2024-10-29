@@ -40,7 +40,7 @@ jobs:
         echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
     
     - name: Build ISO
-      uses: jasonn3/build-container-installer@ceccfc98ef73825152095431bfa85c796f174c7a
+      uses: jasonn3/build-container-installer@v1.2.2@ceccfc98ef73825152095431bfa85c796f174c7a
       id: build
       with:
         arch: ${{ env.ARCH }}
@@ -75,7 +75,7 @@ jobs:
         echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
     - name: Create Release
-      uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191
+      uses: softprops/action-gh-release@v2@c062e08bd532815e2082a85e87e3ef29c3e6d191
       if: success() && github.ref == 'refs/heads/main'
       with:
         tag_name: v${{ steps.iso_version.outputs.version }}
