@@ -38,7 +38,8 @@ check_and_modify() {
 		original_permissions=$(stat -c "%a" "$file")
         
 		# Create temporary file 
-		local temp_file=$(mktemp)
+		local temp_file
+		temp_file=$(mktemp)
 		
 		# Perform replacement 
 		if ! sed "s@${pattern}@${replacement}@g" "$file" > "$temp_file"; then 
