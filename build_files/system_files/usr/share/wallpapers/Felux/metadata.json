@@ -2,19 +2,11 @@
 	"KPlugin": {
 		"Authors": [
 			{
-<<<<<<< HEAD
 				"Email": "",
 				"Name": ""
 			}
 		],
 		"Id": "Felux",
 		"Name": "Felux Wallpaper"
-=======
-				"Email": """Name": ""
-			}
-		],
-		"Id": "Felux",
-		"Name""Felux Wallpaper"
->>>>>>> efcc745 (refactor)
 	}
 }
