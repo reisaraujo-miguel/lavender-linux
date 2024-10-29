@@ -14,8 +14,8 @@ BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
 "$BRANDING_SCRIPT"
 
 #--- Remove unwanted software ---#
-rm /etc/profile.d/vscode-bluefin-profile.sh
-rm -r /etc/skel/.config/Code/
+rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
+rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
 
 rpm-ostree uninstall $(cat $BUILD_FILES_DIR/remove-pkgs)
 
