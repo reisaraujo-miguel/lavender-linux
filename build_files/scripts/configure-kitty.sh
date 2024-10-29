@@ -16,13 +16,10 @@ if [ ! -f "$KDE_GLOBALS" ]; then
     exit 1
 fi
 
-# Create backup
-cp "$KDE_GLOBALS" "${KDE_GLOBALS}.backup"
 
 # Make kitty the default terminal
 if ! sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' "$KDE_GLOBALS"; then
     echo "Failed to update TerminalApplication"
-    cp "${KDE_GLOBALS}.backup" "$KDE_GLOBALS"
     exit 1
 fi
 
@@ -36,13 +33,9 @@ if [ ! -f "$TASKMANAGER_CONFIG" ]; then
     exit 1
 fi
 
-# Create backup
-cp "$TASKMANAGER_CONFIG" "${TASKMANAGER_CONFIG}.backup"
-
 # Change pinned terminal to kitty
 if ! sed -i 's/org\.gnome\.Ptyxis\.desktop/kitty.desktop/g' "$TASKMANAGER_CONFIG"; then
     echo "Failed to update pinned terminal"
-    cp "${TASKMANAGER_CONFIG}.backup" "$TASKMANAGER_CONFIG"
     exit 1
 fi
 

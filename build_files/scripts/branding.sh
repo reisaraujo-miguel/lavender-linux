@@ -7,6 +7,8 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+original_permissions=$(stat -c "%a" /usr/lib/os-release)
+
 # Create temporary file
 temp_file=$(mktemp)
 sed -e 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' \
@@ -25,6 +27,7 @@ if grep -q "aurora\|Aurora" "$temp_file"; then
 fi
 
 mv "$temp_file" /usr/lib/os-release
+chmod "$original_permissions" /usr/lib/os-release
 
 check_and_modify() {
     local file="$1"
@@ -32,7 +35,9 @@ check_and_modify() {
     local replacement="$3"
     
     if [ -f "$file" ]; then
-        # Create temporary file 
+		original_permissions=$(stat -c "%a" "$file")
+        
+		# Create temporary file 
 		local temp_file=$(mktemp)
 		
 		# Perform replacement 
@@ -51,6 +56,7 @@ check_and_modify() {
 
 		# Apply changes atomically 
 		mv "$temp_file" "$file"
+		chmod "$original_permissions" "$file"
     else
         echo "Warning: File $file not found, skipping modification"
 		return 1
