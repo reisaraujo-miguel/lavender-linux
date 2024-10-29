@@ -25,7 +25,8 @@ if ! sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' "$KDE_GLOBALS
     cp "${KDE_GLOBALS}.backup" "$KDE_GLOBALS"
     exit 1
 fi
-sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
+
+sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' "$KDE_GLOBALS"
 
 TASKMANAGER_CONFIG="/usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml"
 
