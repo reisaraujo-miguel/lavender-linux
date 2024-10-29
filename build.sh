@@ -6,8 +6,7 @@ export RELEASE
 RELEASE="$(rpm -E %fedora)"
 [ -z "$RELEASE" ] && { echo "Failed to determine Fedora release"; exit 1; }
 
-export BUILD_FILES_DIR="$(mktemp -d)"
-trap 'rm -rf "${BUILD_FILES_DIR}"' EXIT
+export BUILD_FILES_DIR="/tmp/build_files"
 
 #--- Branding ---#
 BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
