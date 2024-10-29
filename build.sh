@@ -17,7 +17,8 @@ BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
 rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
 rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
 
-rpm-ostree uninstall $(cat $BUILD_FILES_DIR/remove-pkgs)
+mapfile -t remove_pkgs < "$BUILD_FILES_DIR/remove-pkgs"
+rpm-ostree uninstall "${remove_pkgs[@]}"
 
 #--- Install rpm packages ---#
 sed -i "s/^enabled=.*/enabled=1/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
