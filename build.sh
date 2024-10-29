@@ -7,7 +7,9 @@ export RELEASE="$(rpm -E %fedora)"
 export BUILD_FILES_DIR="/tmp/build_files"
 
 #--- Branding ---#
-eval $BUILD_FILES_DIR/scripts/branding.sh
+BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
+[ ! -x "$BRANDING_SCRIPT" ] && { echo "Branding script not found or not executable"; exit 1; }
+"$BRANDING_SCRIPT"
 
 #--- Remove unwanted software ---#
 rm /etc/profile.d/vscode-bluefin-profile.sh
