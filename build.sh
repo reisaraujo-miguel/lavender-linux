@@ -21,21 +21,36 @@ mapfile -t remove_pkgs < "$BUILD_FILES_DIR/remove-pkgs"
 rpm-ostree uninstall "${remove_pkgs[@]}"
 
 #--- Install rpm packages ---#
-sed -i "s/^enabled=.*/enabled=1/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
-rpm-ostree install $(cat $BUILD_FILES_DIR/install-pkgs)
-sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
+REPO_FILE="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
+[ ! -f "$REPO_FILE" ] && { echo "Steam repo file not found"; exit 1; }
+sed -i "s/^enabled=.*/enabled=1/" "$REPO_FILE"
+
+mapfile -t install_pkgs < "$BUILD_FILES_DIR/install-pkgs"
+rpm-ostree install "${install_pkgs[@]}"
+
+sed -i "s/^enabled=.*/enabled=0/" "$REPO_FILE"
 
 #--- Configure desktop ---#
 rm /usr/local
 mkdir -p /usr/local
 
-eval $BUILD_FILES_DIR/scripts/configure-kitty.sh
+execute_config_script() {
+    local script_name="$1"
+    local script_path="${BUILD_FILES_DIR}/scripts/${script_name}"
+    
+    if [ ! -x "$script_path" ]; then
+        echo "Error: Configuration script ${script_name} not found or not executable"
+        return 1
+    fi
+    
+    echo "Executing ${script_name}..."
+    "$script_path" || { echo "Error: ${script_name} failed"; return 1; }
+}
 
-eval $BUILD_FILES_DIR/scripts/configure-theme.sh
-
-eval $BUILD_FILES_DIR/scripts/configure-zsh.sh
-
-eval $BUILD_FILES_DIR/scripts/set-wallpaper.sh
+execute_config_script "configure-kitty.sh"
+execute_config_script "configure-theme.sh"
+execute_config_script "configure-zsh.sh"
+execute_config_script "set-wallpaper.sh"
 
 SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
 if [ ! -d "$SYSTEM_FILES_DIR" ]; then
