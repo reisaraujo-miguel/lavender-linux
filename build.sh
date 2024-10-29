@@ -2,7 +2,9 @@
 
 set -ouex pipefail
 
-export RELEASE="$(rpm -E %fedora)"
+export RELEASE
+RELEASE="$(rpm -E %fedora)"
+[ -z "$RELEASE" ] && { echo "Failed to determine Fedora release"; exit 1; }
 
 export BUILD_FILES_DIR="/tmp/build_files"
 
