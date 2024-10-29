@@ -139,8 +139,29 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
     fi
 }
 
+# Track if it's the first prompt
+FIRST_PROMPT=true
+
+# Track the last executed command
+LAST_COMMAND=""
+
 # Executed before each prompt.
-add-zsh-hook precmd vcs_info
+insert-gap() {
+    # Check if the previous command was not `clear`
+    if [[ "$LAST_COMMAND" != "clear" && "$FIRST_PROMPT" == false ]]; then
+        echo ''  # Add an empty line before each prompt after the first
+    fi
+    FIRST_PROMPT=false
+    vcs_info
+}
+
+# Track the last command before executing it
+track-last-cmd() {
+    LAST_COMMAND=$1
+}
+
+add-zsh-hook precmd insert-gap
+add-zsh-hook preexec track-last-cmd
 
 USER_NAME=$'%{$fg_mauve%}%{$fg_crust%}%B%{$bg_mauve%}%n@%m%f%b%{$fg_overlay0%} %{$reset_fg%}%{$reset_bg%}'
 
@@ -148,7 +169,7 @@ DIR=$'%{$bg_overlay0%}%{$fg_crust%} %B %1~%b%{$reset_bg%}%{$fg_overlay0%}%
 
 GIT_INFO=$'%B${vcs_info_msg_0_}%b'
 
-INPUT_LINE=$'\n%(?.%{$fg_overlay1%}.%{$fg_red%})%(!.󱗒 .)%{$reset_fg%} '
+INPUT_LINE=$'\n%(?.%{$fg_green%}.%{$fg_red%})%(!.󱗒 .)%{$reset_fg%} '
 
 PROMPT="${USER_NAME}${DIR}${GIT_INFO}${INPUT_LINE}"
 

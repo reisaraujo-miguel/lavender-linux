@@ -2,122 +2,95 @@
 
 set -ouex pipefail
 
+export RELEASE
 RELEASE="$(rpm -E %fedora)"
+[ -z "$RELEASE" ] && { echo "Failed to determine Fedora release"; exit 1; }
 
+export BUILD_FILES_DIR="/tmp/build_files"
+
+#--- Branding ---#
+BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
+
+[ ! -x "$BRANDING_SCRIPT" ] && { echo "Branding script not found or not executable"; exit 1; }
+
+"$BRANDING_SCRIPT"
 
 #--- Remove unwanted software ---#
+rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
+rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
 
-#### All my homies use neovim ####
-REMOVE_PACKAGE_LIST="code"
+REMOVE_PKGS_FILE="${BUILD_FILES_DIR}/remove-pkgs"
 
-rm /etc/profile.d/vscode-bluefin-profile.sh
-rm -r /etc/skel/.config/Code/
+[ ! -r "$REMOVE_PKGS_FILE" ] && { echo "Error: remove-pkgs file not found or not readable"; exit 1; }
 
-#### Remove Ptyxis ####
-# I don't like software redundancy. Kitty will be de default terminal,
-# Ptyxis can be installed as flatpak. When Ptyxis fully support ligatures
-# and font features I'll consider swicthing.
-REMOVE_PACKAGE_LIST="$REMOVE_PACKAGE_LIST ptyxis"
-
-
-#### Actually remove packages ####
-rpm-ostree uninstall $REMOVE_PACKAGE_LIST
-
+mapfile -t remove_pkgs < "$REMOVE_PKGS_FILE"
+rpm-ostree uninstall "${remove_pkgs[@]}"
 
 #--- Install rpm packages ---#
+REPO_FILE="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+[ ! -f "$REPO_FILE" ] && { echo "Steam repo file not found"; exit 1; }
 
-#### Install neovim ####
-INSTALL_PACKAGE_LIST="neovim cargo" # cargo is a LunarVim dependency
+sed -i "s/^enabled=.*/enabled=1/" "$REPO_FILE"
 
-#### Install some packages necessary for LSP ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST clang-tools-extra"
+INSTALL_PKGS_FILE="${BUILD_FILES_DIR}/install-pkgs"
 
-#### Install Git Delta ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST git-delta"
+[ ! -r "$INSTALL_PKGS_FILE" ] && { echo "Error: install-pkgs file not found or not readable"; exit 1; }
 
-#### Install kitty-terminfo ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST kitty-terminfo"
+mapfile -t install_pkgs < "$INSTALL_PKGS_FILE"
 
-#### Install zsh packages ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST zsh-autosuggestions zsh-syntax-highlighting"
+MAX_RETRIES=3
+retry=0
+while [ $retry -lt $MAX_RETRIES ]; do
+    if rpm-ostree install "${install_pkgs[@]}"; then
+        break
+    fi
+    
+	retry=$((retry + 1))
+    [ $retry -lt $MAX_RETRIES ] && sleep 5
+done
 
-#### Package for flatpak Steam ####
-INSTALL_PACKAGE_LIST="$INSTALL_PACKAGE_LIST steam-devices" # Coders also game
+[ $retry -eq $MAX_RETRIES ] && { echo "Error: Package installation failed after $MAX_RETRIES attempts"; exit 1; }
 
+sed -i "s/^enabled=.*/enabled=0/" "$REPO_FILE"
 
-#### Actually install packages ####
-sed -i "s/^enabled=.*/enabled=1/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
-rpm-ostree install $INSTALL_PACKAGE_LIST
-sed -i "s/^enabled=.*/enabled=0/" /etc/yum.repos.d/rpmfusion-nonfree-steam.repo
-
-
-#--- Install non rpm packages ---#
-#HOME='/etc/skel'
-
-# Create /usr/local folder
+#--- Configure desktop ---#
 rm /usr/local
 mkdir -p /usr/local
 
-#### Install Kitty ####
-KITTY_VERSION="0.36.4"
+execute_config_script() {
+    local script_name="$1"
+    local script_path="${BUILD_FILES_DIR}/scripts/${script_name}"
+    
+    if [ ! -x "$script_path" ]; then
+        echo "Error: Configuration script ${script_name} not found or not executable"
+        return 1
+    fi
+    
+    echo "Executing ${script_name}..."
+    "$script_path" || { echo "Error: ${script_name} failed"; return 1; }
+}
 
-wget https://github.com/kovidgoyal/kitty/releases/download/v$KITTY_VERSION/kitty-$KITTY_VERSION-x86_64.txz
-tar -xvf kitty-$KITTY_VERSION-x86_64.txz --directory=/usr/local --skip-old-files
-rm kitty-$KITTY_VERSION-x86_64.txz
+# Execute configuration scripts in parallel
+for script in "configure-kitty.sh" "configure-theme.sh" "configure-zsh.sh" "set-wallpaper.sh"; do
+    execute_config_script "$script" &
+done
 
-# Install LunarVim
+wait
 
-#LV_BRANCH='release-1.4/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh) -y --install-dependencies
+# Check if any background process failed
+for job in $(jobs -p); do
+    wait "$job" || { echo "Error: One or more configuration scripts failed"; exit 1; }
+done
 
+SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
+if [ ! -d "$SYSTEM_FILES_DIR" ]; then
+    echo "Error: System files directory not found"
+    exit 1
+fi
 
-#--- Configure desktop ---#
-
-FELUX_GITHUB_DOWNLOAD_URL=https://github.com/reisaraujo-miguel/felux/raw/refs/heads/main
-
-#### Configure Kitty ####
-
-# Change kitty icon
-curl -L https://github.com/DinkDonk/kitty-icon/blob/main/kitty-dark.png?raw=true -o /usr/local/share/icons/hicolor/256x256/apps/kitty.png
-
-# Add kitty default config and Catppuccin-Mocha theme
-mkdir -p /etc/skel/.config/kitty
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/kitty.conf -o /etc/skel/.config/kitty/kitty.conf
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/current-theme.conf -o /etc/skel/.config/kitty/current-theme.conf
-
-# Make kitty the default terminal
-sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
-sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' /usr/share/kde-settings/kde-profile/default/xdg/kdeglobals
-
-# Change pinned terminal to kitty
-sed -i 's/org\.gnome\.Ptyxis\.desktop/kitty.desktop/g' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml
-
-
-#### Configure Global Theme ####
-git clone --depth=1 https://github.com/catppuccin/kde catppuccin-kde
-cd catppuccin-kde
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/scripts/install-catppuccin-theme.sh -o ./install.sh
-./install.sh 2 4 1
-
-cd ..
-rm -r catppuccin-kde
-
-
-#### configure zsh ####
-rm /etc/skel/.zshrc
-rm /etc/skel/.zprofile
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zshenv -o /etc/skel/.zshenv
-
-mkdir -p /etc/skel/.config/zsh/theme
-
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/themes/catppuccin.zsh-theme -o /etc/skel/.config/zsh/theme/catppuccin.zsh-theme
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogin -o /etc/skel/.config/zsh/.zlogin
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zlogout -o /etc/skel/.config/zsh/.zlogout
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zprofile -o /etc/skel/.config/zsh/.zprofile
-curl -L $FELUX_GITHUB_DOWNLOAD_URL/configs/zsh/zshrc -o /etc/skel/.config/zsh/.zshrc
+if [ -z "$(ls -A "$SYSTEM_FILES_DIR")" ]; then
+    echo "Warning: System files directory is empty"
+else
+    cp -r "$SYSTEM_FILES_DIR"/* / || { echo "Error: Failed to copy system files"; exit 1; }
+fi

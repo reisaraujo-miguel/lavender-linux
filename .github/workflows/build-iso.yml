@@ -40,7 +40,7 @@ jobs:
         echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
     
     - name: Build ISO
-      uses: jasonn3/build-container-installer@main
+      uses: jasonn3/build-container-installer@ceccfc98ef73825152095431bfa85c796f174c7a
       id: build
       with:
         arch: ${{ env.ARCH }}
@@ -50,6 +50,9 @@ jobs:
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
         iso_name: ${{ env.IMAGE_NAME }}-v${{ steps.iso_version.outputs.version }}.iso
+        flatpak_remote_name: flathub
+        flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
+        flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4
@@ -60,6 +63,7 @@ jobs:
 
     - name: Get Artifact URL
       id: get_artifact_url
+      if: github.ref == 'refs/heads/main'
       run: |
         ARTIFACT_ID=$(curl -sL \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -71,8 +75,8 @@ jobs:
         echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
     - name: Create Release
-      uses: softprops/action-gh-release@v2
-      if: success()
+      uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191
+      if: success() && github.ref == 'refs/heads/main'
       with:
         tag_name: v${{ steps.iso_version.outputs.version }}
         name: Felux ISO v${{ steps.iso_version.outputs.version }}
