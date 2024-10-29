@@ -36,4 +36,14 @@ eval $BUILD_FILES_DIR/scripts/configure-zsh.sh
 
 eval $BUILD_FILES_DIR/scripts/set-wallpaper.sh
 
-cp -r $BUILD_FILES_DIR/system_files/* /
+SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
+if [ ! -d "$SYSTEM_FILES_DIR" ]; then
+    echo "Error: System files directory not found"
+    exit 1
+fi
+
+if [ -z "$(ls -A "$SYSTEM_FILES_DIR")" ]; then
+    echo "Warning: System files directory is empty"
+else
+    cp -r "$SYSTEM_FILES_DIR"/* / || { echo "Error: Failed to copy system files"; exit 1; }
+fi
