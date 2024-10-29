@@ -1,10 +1,9 @@
 neovim
 cargo
-clang-tools-extra
 git-delta
 kitty
 zsh-autosuggestions
 zsh-syntax-highlighting
 steam-devices
 eza
-
+waydroid
