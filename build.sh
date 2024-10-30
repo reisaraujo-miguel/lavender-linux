@@ -15,9 +15,6 @@ BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
 
 "$BRANDING_SCRIPT"
 
-#--- Branding ---#
-exec $BUILD_FILES_DIR/scripts/branding.sh
-
 #--- Remove unwanted software ---#
 rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
 rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
@@ -87,6 +84,7 @@ for job in $(jobs -p); do
 done
 
 SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
+
 if [ ! -d "$SYSTEM_FILES_DIR" ]; then
     echo "Error: System files directory not found"
     exit 1
