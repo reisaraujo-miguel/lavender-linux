@@ -48,15 +48,6 @@ jobs:
             exit 1
           fi
 
-      - name: Verify available space
-        run: |
-          AVAILABLE_SPACE=$(df --output=avail / | tail -n 1)
-          MINIMUM_SPACE=20000000  # 20GB in KB
-          if [ "$AVAILABLE_SPACE" -lt "$MINIMUM_SPACE" ]; then
-            echo "Insufficient disk space: ${AVAILABLE_SPACE}KB available, ${MINIMUM_SPACE}KB required"
-            exit 1
-          fi
-
       - name: Generate tags
         id: generate-tags
         shell: bash
