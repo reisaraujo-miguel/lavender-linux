@@ -153,14 +153,17 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      # Generate SLSA provenance
-      - name: Install SLSA generator
-        uses: slsa-framework/slsa-github-generator/actions/installer@v2.0.0
-        if: github.event_name != 'pull_request'
-
-      - name: Generate provenance
-        uses: slsa-framework/slsa-github-generator/container@v2.0.0
-        if: github.event_name != 'pull_request'
-        with:
-          image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
-          digest: ${{ steps.push.outputs.digest }}
+  provenance:
+    needs: [build_push]
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    if: startsWith(github.ref, 'refs/tags/') && github.event_name != 'pull_request'
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
+    with:
+      image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
+      digest: ${{ steps.push.outputs.digest }}
+      registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
