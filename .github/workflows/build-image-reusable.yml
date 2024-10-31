@@ -155,11 +155,11 @@ jobs:
 
       # Generate SLSA provenance
       - name: Install SLSA generator
-        uses: slsa-framework/slsa-github-generator/actions/installer@5a775b367a56d5bd118a224a811bba288150a5635a775b367a56d5bd118a224a811bba288150a563
+        uses: slsa-framework/slsa-github-generator/actions/installer@v2.0.0
         if: github.event_name != 'pull_request'
 
       - name: Generate provenance
-        uses: slsa-framework/slsa-github-generator/container@5a775b367a56d5bd118a224a811bba288150a563
+        uses: slsa-framework/slsa-github-generator/container@v2.0.0
         if: github.event_name != 'pull_request'
         with:
           image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
