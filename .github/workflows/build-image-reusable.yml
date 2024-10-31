@@ -28,7 +28,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-
 jobs:
   build_push:
     name: Build and push image
@@ -110,8 +109,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           oci: true
           cache: true
-          cache-from: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ env.MY_IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ env.MY_IMAGE_NAME }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ inputs.image-name }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ inputs.image-name }}:buildcache,mode=max
 
       - name: Lowercase Registry
         id: registry_case
@@ -156,11 +155,11 @@ jobs:
 
       # Generate SLSA provenance
       - name: Install SLSA generator
-        uses: slsa-framework/slsa-github-generator/actions/installer@v1.5.0
+        uses: slsa-framework/slsa-github-generator/actions/installer@5a775b367a56d5bd118a224a811bba288150a5635a775b367a56d5bd118a224a811bba288150a563
         if: github.event_name != 'pull_request'
 
       - name: Generate provenance
-        uses: slsa-framework/slsa-github-generator/container@v1.5.0
+        uses: slsa-framework/slsa-github-generator/container@5a775b367a56d5bd118a224a811bba288150a563
         if: github.event_name != 'pull_request'
         with:
           image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
