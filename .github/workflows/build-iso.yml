@@ -1,9 +1,9 @@
 ---
-name: build-iso
+name: Build Release ISO
 
 on:
   workflow_run:
-    workflows: ["build-image"]
+    workflows: ["Build Main Image"]
     types:
       - completed
     branches:
