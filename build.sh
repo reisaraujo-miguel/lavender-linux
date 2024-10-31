@@ -2,116 +2,85 @@
 
 set -ouex pipefail
 
-export RELEASE
-RELEASE="$(rpm -E %fedora)"
-[ -z "$RELEASE" ] && { echo "Failed to determine Fedora release"; exit 1; }
-
+# Constants
+export RELEASE="$(rpm -E %fedora)"
 export BUILD_FILES_DIR="/tmp/build_files"
+export SCRIPTS_DIR="${BUILD_FILES_DIR}/scripts"
+export SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
 
-#--- Branding ---#
-BRANDING_SCRIPT="${BUILD_FILES_DIR}/scripts/branding.sh"
+# Validate environment
+[[ -z "$RELEASE" ]] && { echo "Failed to determine Fedora release"; exit 1; }
+[[ ! -d "$BUILD_FILES_DIR" ]] && { echo "Build files directory not found"; exit 1; }
 
-[ ! -x "$BRANDING_SCRIPT" ] && { echo "Branding script not found or not executable"; exit 1; }
+# Helper Functions
+execute_script() {
+    local script="$1"
+    local script_path="${SCRIPTS_DIR}/${script}"
 
-"$BRANDING_SCRIPT"
-
-#--- Branding ---#
-sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/lib/os-release
-sed -i 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' /usr/lib/os-release
-
-sed -i 's/Aurora-dx/Felux/' /usr/lib/os-release
-sed -i 's/Aurora/Felux/' /usr/lib/os-release
-sed -i 's/aurora-dx/felux/' /usr/lib/os-release
-sed -i 's/aurora/felux/' /usr/lib/os-release
-
-sed -i 's/Aurora-dx/Felux/' /etc/yafti.yml
-
-sed -i 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
-sed -i 's/Aurora-DX/Felux/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
-
-sed -i 's/Aurora/Felux/' /usr/libexec/ublue-flatpak-manager
-
-sed -i 's/aurora-dx/felux/' /usr/share/ublue-os/image-info.json
-sed -i 's/ublue-os\/aurora-dx/reisaraujo-miguel\/felux/' /usr/share/ublue-os/image-info.json
-
-
-#--- Remove unwanted software ---#
-rm -f /etc/profile.d/vscode-bluefin-profile.sh || echo "Warning: VSCode profile script not found"
-rm -rf /etc/skel/.config/Code/ || echo "Warning: VSCode config directory not found"
-
-REMOVE_PKGS_FILE="${BUILD_FILES_DIR}/remove-pkgs"
-
-[ ! -r "$REMOVE_PKGS_FILE" ] && { echo "Error: remove-pkgs file not found or not readable"; exit 1; }
-
-mapfile -t remove_pkgs < "$REMOVE_PKGS_FILE"
-rpm-ostree uninstall "${remove_pkgs[@]}"
-
-#--- Install rpm packages ---#
-REPO_FILE="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
-
-[ ! -f "$REPO_FILE" ] && { echo "Steam repo file not found"; exit 1; }
-
-sed -i "s/^enabled=.*/enabled=1/" "$REPO_FILE"
-
-INSTALL_PKGS_FILE="${BUILD_FILES_DIR}/install-pkgs"
-
-[ ! -r "$INSTALL_PKGS_FILE" ] && { echo "Error: install-pkgs file not found or not readable"; exit 1; }
-
-mapfile -t install_pkgs < "$INSTALL_PKGS_FILE"
-
-MAX_RETRIES=3
-retry=0
-while [ $retry -lt $MAX_RETRIES ]; do
-    if rpm-ostree install "${install_pkgs[@]}"; then
-        break
-    fi
-    
-	retry=$((retry + 1))
-    [ $retry -lt $MAX_RETRIES ] && sleep 5
-done
-
-[ $retry -eq $MAX_RETRIES ] && { echo "Error: Package installation failed after $MAX_RETRIES attempts"; exit 1; }
-
-sed -i "s/^enabled=.*/enabled=0/" "$REPO_FILE"
-
-#--- Configure desktop ---#
-rm /usr/local
-mkdir -p /usr/local
-
-execute_config_script() {
-    local script_name="$1"
-    local script_path="${BUILD_FILES_DIR}/scripts/${script_name}"
-    
-    if [ ! -x "$script_path" ]; then
-        echo "Error: Configuration script ${script_name} not found or not executable"
+    if [[ ! -x "$script_path" ]]; then
+        echo "Error: Script ${script} not found or not executable"
         return 1
-    fi
-    
-    echo "Executing ${script_name}..."
-    "$script_path" || { echo "Error: ${script_name} failed"; return 1; }
+	fi
+
+    echo "Executing ${script}..."
+    "$script_path" || { echo "Error: ${script} failed"; return 1; }
 }
 
-# Execute configuration scripts in parallel
-for script in "configure-kitty.sh" "configure-theme.sh" "configure-zsh.sh" "set-wallpaper.sh"; do
-    execute_config_script "$script" &
-done
+install_packages() {
+    local pkg_file="$1"
+    local retries=3
+    local attempt=1
+	local repo_file="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
 
-wait
+	[ ! -f "$repo_file" ] && { echo "Steam repo file not found"; exit 1; }
+	sed -i "s/^enabled=.*/enabled=1/" "$repo_file"
 
-# Check if any background process failed
-for job in $(jobs -p); do
-    wait "$job" || { echo "Error: One or more configuration scripts failed"; exit 1; }
-done
+    while [ $attempt -le $retries ]; do
+        if rpm-ostree install --idempotent -y $(cat "$pkg_file"); then
+            return 0
+        fi
+        attempt=$((attempt + 1))
+        [ $attempt -le $retries ] && sleep 5
+    done
 
-SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
+	sed -i "s/^enabled=.*/enabled=0/" "$repo_file"
 
-if [ ! -d "$SYSTEM_FILES_DIR" ]; then
-    echo "Error: System files directory not found"
-    exit 1
-fi
+    echo "Failed to install packages after $retries attempts"
+    return 1
+}
 
-if [ -z "$(ls -A "$SYSTEM_FILES_DIR")" ]; then
-    echo "Warning: System files directory is empty"
-else
-    cp -r "$SYSTEM_FILES_DIR"/* / || { echo "Error: Failed to copy system files"; exit 1; }
-fi
+remove_packages() {
+    local pkg_file="$1"
+    rpm-ostree override remove $(cat "$pkg_file")
+}
+
+# Main Installation Steps
+main() {
+    # 1. System Branding
+    execute_script "branding.sh"
+
+    # 2. Remove Unwanted Packages
+    remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
+
+    # 3. Install Required Packages
+    install_packages "${BUILD_FILES_DIR}/install-pkgs"
+
+    # 4. Configure Desktop Environment
+	rm /usr/local
+	mkdir -p /usr/local
+
+    execute_script "configure-theme.sh"
+    execute_script "configure-kitty.sh"
+    execute_script "configure-zsh.sh"
+    execute_script "set-wallpaper.sh"
+
+    # 5. Install System Files
+    if [[ -d "$SYSTEM_FILES_DIR" ]]; then
+        cp -r "${SYSTEM_FILES_DIR}"/* / || { echo "Failed to copy system files"; exit 1; }
+    else
+        echo "Warning: System files directory not found"
+    fi
+}
+
+# Execute main function
+main
