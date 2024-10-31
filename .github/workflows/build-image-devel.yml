@@ -27,3 +27,7 @@ jobs:
       ref: devel
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
