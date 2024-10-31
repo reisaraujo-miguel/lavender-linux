@@ -446,12 +446,14 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
     if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
 		
 		if [ ! -f /etc/skel/.config/kdeglobals ]; then
-		  mkdir -p /etc/skel/.config
-		  touch /etc/skel/.config/kdeglobals
+			mkdir -p /etc/skel/.config
+			touch /etc/skel/.config/kdeglobals
 		fi
+		
 		if ! grep -q "^\[KDE\]" /etc/skel/.config/kdeglobals; then
-		  echo "[KDE]" >> /etc/skel/.config/kdeglobals
+		  	echo "[KDE]" >> /etc/skel/.config/kdeglobals
 		fi
+		
 		sed -i "/^\[KDE\]/,/^\[/ { /^LookAndFeelPackage=/d }" /etc/skel/.config/kdeglobals
 		sed -i "/^\[KDE\]/a LookAndFeelPackage=$GLOBALTHEMENAME" /etc/skel/.config/kdeglobals
 

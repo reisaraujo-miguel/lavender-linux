@@ -32,7 +32,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write
+      id-token: write # Required for SLSA provenance
 
     steps:
       - name: Checkout Push to Registry action
@@ -136,6 +136,7 @@ jobs:
           extra-args: |
             --disable-content-trust
 
+      # Sign container image with Cosign
       - uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da
         if: github.event_name != 'pull_request'
 
@@ -147,3 +148,15 @@ jobs:
           TAGS: ${{ steps.push.outputs.digest }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+
+      # Generate SLSA provenance
+      - name: Install SLSA generator
+        uses: slsa-framework/slsa-github-generator/actions/installer@v1.5.0
+        if: github.event_name != 'pull_request'
+
+      - name: Generate provenance
+        uses: slsa-framework/slsa-github-generator/container@v1.5.0
+        if: github.event_name != 'pull_request'
+        with:
+          image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
+          digest: ${{ steps.push.outputs.digest }}
