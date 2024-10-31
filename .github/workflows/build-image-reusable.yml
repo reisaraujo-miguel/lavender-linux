@@ -158,8 +158,8 @@ jobs:
     if: github.event_name != 'pull_request'
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
     with:
-      image: ${{ needs.build_push.registry_case.outputs.lowercase }}/${{ needs.build_push.build_image.outputs.image }}
-      digest: ${{ needs.build_push.push.outputs.digest }}
+      image: ${{ needs.build_image.outputs.image }}
+      digest: ${{ needs.push.outputs.digest }}
       registry-username: ${{ github.actor }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
