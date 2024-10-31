@@ -15,7 +15,7 @@ env:
   IMAGE_NAME: felux
   IMAGE_REPO: ghcr.io/reisaraujo-miguel
   IMAGE_TAG: latest
-  VERSION: "40"
+  VERSION: "41"
   VARIANT: Kinoite
 
 jobs:
@@ -33,6 +33,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Get ISO Build Date
+      id: iso_build_date
+      run: |
+        ISO_BUILD_DATE=$(date +"%Y%m%d")
+        echo "date=$ISO_BUILD_DATE" >> $GITHUB_OUTPUT
+
     - name: Build ISO
       uses: jasonn3/build-container-installer@v1.2.2
       id: build
@@ -43,21 +49,15 @@ jobs:
         image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
-        iso_name: ${{ env.IMAGE_NAME }}-${{ env.VERSION }}.iso
+        iso_name: ${{ env.IMAGE_NAME }}-${{ env.VERSION }}-${{ steps.iso_build_date.outputs.date }}.iso
         flatpak_remote_name: flathub
         flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
         flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
-    - name: Get ISO version
-      id: iso_version
-      run: |
-        ISO_VERSION=$(date +"%Y%m%d")
-        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
-
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: felux-v${{ steps.iso_version.outputs.version }}
+        name: ${{ steps.build.outputs.iso_name }}
         path: ${{ github.workspace }}/${{ steps.build.outputs.iso_name }}
         if-no-files-found: error
 
@@ -69,19 +69,25 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
-          | jq '.artifacts[] | select(.name=="felux-v${{ steps.iso_version.outputs.version }}") | .id')
+          | jq '.artifacts[] | select(.name=="${{ steps.build.outputs.iso_name }}") | .id')
 
-        ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/felux-v${{ steps.iso_version.outputs.version }}"
+        ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/${{ steps.build.outputs.iso_name }}"
         echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+
+    - name: Format Build Date
+      id: format_date
+      run: echo "formatted_date=$(date -d '${{ steps.iso_build_date.outputs.date }}' +"%Y/%m/%d")" >> $GITHUB_ENV
 
     - name: Create Release
       uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191
       if: success() && github.ref == 'refs/heads/main'
       with:
-        tag_name: v${{ steps.iso_version.outputs.version }}
-        name: Felux ISO v${{ steps.iso_version.outputs.version }}
+        tag_name: v${{ env.VERSION }}
+        name: Felux ${{ env.VERSION }}
         body: |
-          Felux ISO v${{ steps.iso_version.outputs.version }} (Based on Fedora ${{ env.VERSION }})
+          Felux ${{ env.VERSION }} (Based on Fedora ${{ env.VERSION }})
+
+          last built on: ${{ env.formatted_date }}
 
           The ISO file is available as a GitHub Actions artifact due to file size limitations.
 
