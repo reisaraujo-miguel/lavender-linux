@@ -16,14 +16,16 @@ if [ ! -f "$KDE_GLOBALS" ]; then
     exit 1
 fi
 
-
 # Make kitty the default terminal
 if ! sed -i 's/^TerminalApplication=.*/TerminalApplication=kitty/' "$KDE_GLOBALS"; then
     echo "Failed to update TerminalApplication"
     exit 1
 fi
 
-sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' "$KDE_GLOBALS"
+if ! sed -i 's/^TerminalService=.*/TerminalService=kitty.desktop/' "$KDE_GLOBALS"; then
+    echo "Failed to update TerminalService"
+    exit 1
+fi
 
 TASKMANAGER_CONFIG="/usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml"
 

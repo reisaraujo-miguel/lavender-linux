@@ -241,7 +241,7 @@ export PATH
 
 #----------------------------------------------------------#
 
-# Brew 
+# Brew
 if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   if type brew &>/dev/null; then
@@ -276,14 +276,14 @@ echo -ne "\033]0;${USER}@${HOST}\007"
 #----------------------------------------------------------#
 
 ZSH_THEME="catppuccin"
-source ~/.config/zsh/theme/catppuccin.zsh-theme
+source $ZSHCONFIG/theme/catppuccin.zsh-theme
 
-source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Source autosuggestions if available
+autosuggestions_plugin="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -f $autosuggestions_plugin ]] && source $autosuggestions_plugin
 
 # Configure autosuggestions
-ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
-# ZSH_AUTOSUGGEST_COMPLETION_IGNORE="\["
-# ZSH_AUTOSUGGEST_HISTORY_IGNORE="\["
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history)
 
 #----------------------------------------------------------#
 
