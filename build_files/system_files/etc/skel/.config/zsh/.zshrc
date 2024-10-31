@@ -276,7 +276,7 @@ echo -ne "\033]0;${USER}@${HOST}\007"
 #----------------------------------------------------------#
 
 ZSH_THEME="catppuccin"
-source $ZSHCONFIG/theme/catppuccin.zsh-theme
+source $ZDOTDIR/theme/catppuccin.zsh-theme
 
 # Source autosuggestions if available
 autosuggestions_plugin="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"

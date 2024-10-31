@@ -36,7 +36,10 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write # Required for SLSA provenance
+
+    outputs:
+      image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
+      digest: ${{ steps.push.outputs.digest }}
 
     steps:
       - name: Checkout Push to Registry action
@@ -108,9 +111,6 @@ jobs:
             ${{ steps.generate-tags.outputs.alias_tags }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: true
-          cache: true
-          cache-from: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ inputs.image-name }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_REGISTRY }}/${{ inputs.image-name }}:buildcache,mode=max
 
       - name: Lowercase Registry
         id: registry_case
@@ -153,14 +153,17 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      # Generate SLSA provenance
-      - name: Install SLSA generator
-        uses: slsa-framework/slsa-github-generator/actions/installer@5a775b367a56d5bd118a224a811bba288150a5635a775b367a56d5bd118a224a811bba288150a563
-        if: github.event_name != 'pull_request'
-
-      - name: Generate provenance
-        uses: slsa-framework/slsa-github-generator/container@5a775b367a56d5bd118a224a811bba288150a563
-        if: github.event_name != 'pull_request'
-        with:
-          image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
-          digest: ${{ steps.push.outputs.digest }}
+  provenance:
+    needs: [build_push]
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    if: github.event_name != 'pull_request'
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
+    with:
+      image: ${{ needs.build_push.outputs.image }}
+      digest: ${{ needs.build_push.outputs.digest }}
+      registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}

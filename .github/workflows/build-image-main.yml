@@ -22,3 +22,8 @@ jobs:
       image-description: "Main image for ${{ github.event.repository.name }}"
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      id-token: write
