@@ -1,0 +1,29 @@
+---
+name: Build Devel Image
+
+on:
+  pull_request:
+    branches:
+      - devel
+  schedule:
+    - cron: '05 10 * * *'  # 10:05am UTC everyday
+  push:
+    branches:
+      - devel
+    paths-ignore:
+      - '**/README.md'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'branch to build from'
+        default: 'devel'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-image-reusable.yml
+    with:
+      image-name: "${{ github.event.repository.name }}-devel"
+      image-description: "Devel image for ${{ github.event.repository.name }}"
+      ref: devel
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}

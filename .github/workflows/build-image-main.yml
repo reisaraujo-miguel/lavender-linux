@@ -1,0 +1,24 @@
+---
+name: Build Main Image
+
+on:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '05 10 * * *'  # 10:05am UTC everyday
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-image-reusable.yml
+    with:
+      image-name: ${{ github.event.repository.name }}
+      image-description: "Main image for ${{ github.event.repository.name }}"
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
