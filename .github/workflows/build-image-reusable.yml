@@ -37,6 +37,10 @@ jobs:
       contents: read
       packages: write
 
+    outputs:
+      image: ${{ steps.build_image.outputs.image }}
+      digest: ${{ steps.push.outputs.digest }}
+
     steps:
       - name: Checkout Push to Registry action
         uses: actions/checkout@v4
@@ -158,8 +162,8 @@ jobs:
     if: github.event_name != 'pull_request'
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
     with:
-      image: ${{ needs.build_image.outputs.image }}
-      digest: ${{ needs.push.outputs.digest }}
+      image: ${{ needs.build_push.outputs.image }}
+      digest: ${{ needs.build_push.outputs.digest }}
       registry-username: ${{ github.actor }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
