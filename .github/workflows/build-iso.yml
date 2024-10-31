@@ -32,7 +32,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-       
+
     - name: Build ISO
       uses: jasonn3/build-container-installer@v1.2.2
       id: build
@@ -52,7 +52,7 @@ jobs:
       id: iso_version
       run: |
         ISO_VERSION=$(date +"%Y%m%d")
-        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT 
+        echo "version=$ISO_VERSION" >> $GITHUB_OUTPUT
 
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
           | jq '.artifacts[] | select(.name=="felux-v${{ steps.iso_version.outputs.version }}") | .id')
-        
+
         ARTIFACT_URL="https://github.com/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/felux-v${{ steps.iso_version.outputs.version }}"
         echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
@@ -82,15 +82,15 @@ jobs:
         name: Felux ISO v${{ steps.iso_version.outputs.version }}
         body: |
           Felux ISO v${{ steps.iso_version.outputs.version }} (Based on Fedora ${{ env.VERSION }})
-          
+
           The ISO file is available as a GitHub Actions artifact due to file size limitations.
-          
+
           [Download ISO Artifact](${{ steps.get_artifact_url.outputs.artifact_url }})
-          
+
           Note: You need to be logged in to GitHub to download the artifact.
-          
+
           Checksum file is attached to this release.
-          
+
           ISO Filename: ${{ steps.build.outputs.iso_name }}
         draft: false
         prerelease: false
