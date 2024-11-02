@@ -1,6 +1,4 @@
 neovim
-cargo
-clang-tools-extra
 git-delta
 kitty
 zsh-autosuggestions
