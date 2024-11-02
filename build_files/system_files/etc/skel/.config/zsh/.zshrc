@@ -184,10 +184,16 @@ add_to_path() {
 # Add local bin to path
 add_to_path "$HOME/.local/bin"
 
-# Add npm
-NPM_PACKAGES="$HOME/.npm-packages"
-add_to_path "$NPM_PACKAGES/bin"
-add_to_path "$HOME/.local/share/npm/bin"
+# Configure npm
+if npm -v &> /dev/null; then
+	NPM_CONFIG_PREFIX="$HOME/.npm-global"
+	mkdir -p "$NPM_CONFIG_PREFIX/lib" "$NPM_CONFIG_PREFIX/bin"
+
+	npm config set prefix "$NPM_CONFIG_PREFIX"
+
+	add_to_path "$NPM_CONFIG_PREFIX/bin"
+	add_to_path "$HOME/.local/share/npm/bin"
+fi
 
 # Add my scripts to path
 if [ -d "$HOME/scripts" ]; then
