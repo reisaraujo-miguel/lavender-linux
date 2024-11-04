@@ -40,7 +40,7 @@ jobs:
         echo "date=$ISO_BUILD_DATE" >> $GITHUB_OUTPUT
 
     - name: Build ISO
-      uses: jasonn3/build-container-installer@v1.2.2
+      uses: jasonn3/build-container-installer@v1.2.3
       id: build
       with:
         arch: ${{ env.ARCH }}
