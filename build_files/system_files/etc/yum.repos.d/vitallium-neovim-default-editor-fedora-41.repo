@@ -1,0 +1,10 @@
+[copr:copr.fedorainfracloud.org:vitallium:neovim-default-editor]
+name=Copr repo for neovim-default-editor owned by vitallium
+baseurl=https://download.copr.fedorainfracloud.org/results/vitallium/neovim-default-editor/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/vitallium/neovim-default-editor/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
