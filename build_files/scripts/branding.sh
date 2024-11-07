@@ -55,3 +55,4 @@ check_and_modify "/usr/share/ublue-os/image-info.json" "ublue-os\/aurora-dx" "re
 check_and_modify "/usr/share/applications/system-update.desktop" "Aurora" "Felux"
 check_and_modify "/usr/share/ublue-os/motd/tips/10-tips.md" "Aurora" "Felux"
 check_and_modify "/usr/libexec/ublue-flatpak-manager" "Aurora" "Felux"
+check_and_modify "/usr/share/ublue-os/motd/bluefin.md" "Aurora" "Felux"
