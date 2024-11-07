@@ -54,19 +54,15 @@ jobs:
         flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
         flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
-    - name: Compress ISO
-      id: compression
-      run: |
-        ZIP_NAME="${{ steps.build.outputs.iso_name%.iso }}.zip"
-        echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
-        zip -r "${{ github.workspace }}/$ZIP_NAME" "${{ github.workspace }}/${{ steps.build.outputs.iso_name }}"
-
     - name: Upload ISO as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: "${{ steps.compression.outputs.zip_name }}"
-        path: "${{ github.workspace }}/${{ steps.compression.outputs.zip_name }}"
+        name: "${{ steps.build.outputs.iso_name }}"
+        path: |
+          "${{ steps.build.outputs.iso_path }}"
+          "${{ steps.build.outputs.iso_path }}-CHECKSUM"
         if-no-files-found: error
+        compression-level: 0
 
     - name: Format Build Date
       id: format_date
@@ -95,6 +91,6 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          "${{ github.workspace }}/${{ steps.compression.outputs.zip_name }}-CHECKSUM"
+          "${{ steps.build.outputs.iso_path }}-CHECKSUM"
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
