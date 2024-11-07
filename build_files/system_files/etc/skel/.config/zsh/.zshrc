@@ -269,7 +269,7 @@ export LSP_USE_PLISTS=true
 
 # Preserve MANPATH if you already defined it somewhere in your config.
 # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
-export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+export MANPATH="${MANPATH-$(manpath)}:$NPM_CONFIG_PREFIX/share/man"
 
 #----------------------------------------------------------#
 
