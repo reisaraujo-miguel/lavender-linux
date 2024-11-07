@@ -30,12 +30,8 @@ install_packages() {
     local pkg_file="$1"
     local retries=3
     local attempt=1
-	local repo_file="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
 
-	[ ! -f "$repo_file" ] && { echo "Steam repo file not found"; exit 1; }
-	sed -i "s/^enabled=.*/enabled=1/" "$repo_file"
-
-    while [ $attempt -le $retries ]; do
+	while [ $attempt -le $retries ]; do
         if rpm-ostree install --idempotent -y $(cat "$pkg_file"); then
             return 0
         fi
@@ -57,8 +53,8 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-	# 1. Install System Files
-    execute_script "copy-system-files.sh"
+	# 1. Install Copr Repos
+	execute_script "set-extra-repos.sh"
 
 	# 2. Install Required Packages
     install_packages "${BUILD_FILES_DIR}/install-pkgs"
@@ -72,6 +68,9 @@ main() {
     execute_script "configure-kitty.sh"
     execute_script "configure-zsh.sh"
     execute_script "set-wallpaper.sh"
+
+	# 5. Install System Files
+    execute_script "copy-system-files.sh"
 }
 
 # Execute main function
