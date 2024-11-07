@@ -53,25 +53,27 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-	# 1. Install Copr Repos
+	# Install Copr Repos
 	execute_script "set-extra-repos.sh"
 
-	# 2. Install Required Packages
+	# Install Required Packages
     install_packages "${BUILD_FILES_DIR}/install-pkgs"
 
-    # 3. Remove Unwanted Packages
+    # Remove Unwanted Packages
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
 
-    # 4. Configure Desktop Environment
+	# Configure Desktop Environment
     execute_script "branding.sh"
 	execute_script "configure-theme.sh"
     execute_script "configure-kitty.sh"
     execute_script "configure-zsh.sh"
     execute_script "set-wallpaper.sh"
 
-	# 5. Install System Files
+	# Install System Files
     execute_script "copy-system-files.sh"
+
+	# Disbale extra repos
+	execute_script "unset-extra-repos.sh"
 }
 
-# Execute main function
 main
