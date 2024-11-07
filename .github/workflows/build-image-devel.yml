@@ -13,10 +13,6 @@ on:
     paths-ignore:
       - '**/README.md'
   workflow_dispatch:
-    inputs:
-      ref:
-        description: 'branch to build from'
-        default: 'devel'
 
 jobs:
   build:

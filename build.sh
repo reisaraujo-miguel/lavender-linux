@@ -30,12 +30,8 @@ install_packages() {
     local pkg_file="$1"
     local retries=3
     local attempt=1
-	local repo_file="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
 
-	[ ! -f "$repo_file" ] && { echo "Steam repo file not found"; exit 1; }
-	sed -i "s/^enabled=.*/enabled=1/" "$repo_file"
-
-    while [ $attempt -le $retries ]; do
+	while [ $attempt -le $retries ]; do
         if rpm-ostree install --idempotent -y $(cat "$pkg_file"); then
             return 0
         fi
@@ -43,44 +39,41 @@ install_packages() {
         [ $attempt -le $retries ] && sleep 5
     done
 
-	sed -i "s/^enabled=.*/enabled=0/" "$repo_file"
-
     echo "Failed to install packages after $retries attempts"
     return 1
 }
 
 remove_packages() {
     local pkg_file="$1"
-    rpm-ostree override remove $(cat "$pkg_file")
+    rpm-ostree override remove $(cat "$pkg_file") --install neovim-default-editor
+
+	rm /etc/profile.d/vscode-bluefin-profile.sh
+	rm -r /etc/skel/.config/Code/
 }
 
 # Main Installation Steps
 main() {
-    # 1. System Branding
-    execute_script "branding.sh"
+	# Install Copr Repos
+	execute_script "set-extra-repos.sh"
 
-    # 2. Remove Unwanted Packages
-    remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
-
-    # 3. Install Required Packages
+	# Install Required Packages
     install_packages "${BUILD_FILES_DIR}/install-pkgs"
 
-    # 4. Configure Desktop Environment
-	rm /usr/local
-	mkdir -p /usr/local
+    # Remove Unwanted Packages
+    remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
 
-    execute_script "configure-theme.sh"
+	# Configure Desktop Environment
+    execute_script "branding.sh"
+	execute_script "configure-theme.sh"
     execute_script "configure-kitty.sh"
     execute_script "configure-zsh.sh"
     execute_script "set-wallpaper.sh"
 
-    # 5. Install System Files
-    if [[ -d "$SYSTEM_FILES_DIR" ]]; then
-        cp -r "${SYSTEM_FILES_DIR}"/* / || { echo "Failed to copy system files"; exit 1; }
-    else
-        echo "Warning: System files directory not found"
-    fi
+	# Install System Files
+    execute_script "copy-system-files.sh"
+
+	# Disbale extra repos
+	execute_script "unset-extra-repos.sh"
 }
 
-# Execute main function
 main
