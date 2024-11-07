@@ -192,7 +192,6 @@ if npm -v &> /dev/null; then
 	npm config set prefix "$NPM_CONFIG_PREFIX"
 
 	add_to_path "$NPM_CONFIG_PREFIX/bin"
-	add_to_path "$HOME/.local/share/npm/bin"
 fi
 
 # Add my scripts to path
