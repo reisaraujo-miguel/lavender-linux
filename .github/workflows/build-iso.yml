@@ -49,6 +49,10 @@ jobs:
         image_tag: ${{ env.IMAGE_TAG }}
         version: ${{ env.VERSION }}
         variant: ${{ env.VARIANT }}
+        secure_boot_key_url: https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
+        enrollment_password: universalblue
+        enable_cache_dnf: false
+        enable_cache_skopeo: false
         iso_name: ${{ env.IMAGE_NAME }}-${{ env.VERSION }}-${{ steps.iso_build_date.outputs.date }}.iso
         flatpak_remote_name: flathub
         flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
