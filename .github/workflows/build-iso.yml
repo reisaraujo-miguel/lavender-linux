@@ -55,12 +55,13 @@ jobs:
         flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
     - name: Upload ISO as artifact
+      id: upload
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.build.outputs.iso_name }}
         path: |
-          ${{ steps.build.outputs.iso_path }}
-          ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
+          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
         if-no-files-found: error
         compression-level: 0
 
@@ -81,7 +82,7 @@ jobs:
 
           The ISO file is available as a GitHub Actions artifact due to file size limitations.
 
-          [Download ISO Artifact](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          [Download ISO Artifact](${{ steps.upload.outputs.artifact_url }})
 
           Note: You need to be logged in to GitHub to download the artifact.
 
@@ -91,6 +92,6 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

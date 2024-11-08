@@ -18,8 +18,8 @@ jobs:
   build:
     uses: ./.github/workflows/build-image-reusable.yml
     with:
-      image-name: "${{ github.event.repository.name }}-devel"
-      image-description: "Devel image for ${{ github.event.repository.name }}"
+      image-name: ${{ github.event.repository.name }}-devel
+      image-description: Devel image for ${{ github.event.repository.name }}
       ref: devel
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
