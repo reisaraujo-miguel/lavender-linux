@@ -95,7 +95,5 @@ jobs:
           ISO Filename: ${{ steps.build.outputs.iso_name }}
         draft: false
         prerelease: false
-        files: |
-          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
