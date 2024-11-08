@@ -65,7 +65,6 @@ jobs:
         name: ${{ steps.build.outputs.iso_name }}
         path: |
           ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
-          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
         if-no-files-found: error
         compression-level: 0
 
@@ -95,5 +94,7 @@ jobs:
           ISO Filename: ${{ steps.build.outputs.iso_name }}
         draft: false
         prerelease: false
+        files: |
+          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
