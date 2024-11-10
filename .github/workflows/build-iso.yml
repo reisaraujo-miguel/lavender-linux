@@ -83,9 +83,8 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          go install github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4
-
-          git-chglog --next-tag v${{ env.release_ver }} v${{ env.release_ver }} -o CHANGELOG.md
+          git-chglog="github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4"
+          go run "$git-chglog" -o CHANGELOG.md --next-tag v${{ env.release_ver }} v${{ env.release_ver }}
 
           echo "changelog=$(cat CHANGELOG.md)" >> $GITHUB_ENV
 
