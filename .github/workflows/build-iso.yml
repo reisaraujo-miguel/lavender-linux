@@ -2,12 +2,10 @@
 name: Build Release ISO
 
 on:
-  workflow_run:
-    workflows: ["Build Main Image"]
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    tags:
+      - 'v*'
+
   workflow_dispatch:
 
 env:
@@ -21,11 +19,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: |
-      (github.event_name == 'workflow_dispatch') ||
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event != 'schedule')
     permissions:
       contents: write
       actions: read
@@ -37,12 +30,6 @@ jobs:
         id: get_version
         run: |
           echo "release_ver=$(cat ./version.txt)" >> $GITHUB_ENV
-
-      - name: Get ISO Build Date
-        id: iso_build_date
-        run: |
-          ISO_BUILD_DATE="$(date +"%Y%m%d")"
-          echo "date=$ISO_BUILD_DATE" >> "$GITHUB_OUTPUT"
 
       - name: Build ISO
         uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743
@@ -58,7 +45,7 @@ jobs:
           enrollment_password: universalblue
           enable_cache_dnf: false
           enable_cache_skopeo: false
-          iso_name: ${{ env.IMAGE_NAME }}-${{ env.release_ver }}-${{ steps.iso_build_date.outputs.date }}.iso
+          iso_name: ${{ env.IMAGE_NAME }}-v${{ env.release_ver }}.iso
           flatpak_remote_name: flathub
           flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
           flatpak_remote_refs_dir: /github/workspace/flatpak_refs
