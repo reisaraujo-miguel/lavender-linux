@@ -2,12 +2,9 @@
 name: Build Release ISO
 
 on:
-  workflow_run:
-    workflows: ["Build Main Image"]
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 env:
@@ -21,79 +18,84 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: |
-      (github.event_name == 'workflow_dispatch') ||
-      (github.event_name == 'workflow_run' &&
-       github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.event != 'schedule')
     permissions:
       contents: write
       actions: read
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Get ISO Build Date
-      id: iso_build_date
-      run: |
-        ISO_BUILD_DATE="$(date +"%Y%m%d")"
-        echo "date=$ISO_BUILD_DATE" >> "$GITHUB_OUTPUT"
+      - name: Get Release Version
+        id: get_version
+        run: |
+          echo "release_ver=$(cat ./version.txt)" >> $GITHUB_ENV
 
-    - name: Build ISO
-      uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743
-      id: build
-      with:
-        arch: ${{ env.ARCH }}
-        image_name: ${{ env.IMAGE_NAME }}
-        image_repo: ${{ env.IMAGE_REPO }}
-        image_tag: ${{ env.IMAGE_TAG }}
-        version: ${{ env.VERSION }}
-        variant: ${{ env.VARIANT }}
-        secure_boot_key_url: https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
-        enrollment_password: universalblue
-        enable_cache_dnf: false
-        enable_cache_skopeo: false
-        iso_name: ${{ env.IMAGE_NAME }}-${{ env.VERSION }}-${{ steps.iso_build_date.outputs.date }}.iso
-        flatpak_remote_name: flathub
-        flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
-        flatpak_remote_refs_dir: /github/workspace/flatpak_refs
+      - name: Build ISO
+        uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743
+        id: build
+        with:
+          arch: ${{ env.ARCH }}
+          image_name: ${{ env.IMAGE_NAME }}
+          image_repo: ${{ env.IMAGE_REPO }}
+          image_tag: ${{ env.IMAGE_TAG }}
+          version: ${{ env.VERSION }}
+          variant: ${{ env.VARIANT }}
+          secure_boot_key_url: https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
+          enrollment_password: universalblue
+          enable_cache_dnf: false
+          enable_cache_skopeo: false
+          iso_name: ${{ env.IMAGE_NAME }}-v${{ env.release_ver }}.iso
+          flatpak_remote_name: flathub
+          flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
+          flatpak_remote_refs_dir: /github/workspace/flatpak_refs
 
-    - name: Upload ISO as artifact
-      id: upload
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ steps.build.outputs.iso_name }}
-        path: |
-          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
-          ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
-        if-no-files-found: error
-        compression-level: 0
+      - name: Upload ISO as artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
+          if-no-files-found: error
+          compression-level: 0
 
-    - name: Format Build Date
-      id: format_date
-      run: echo "formatted_date=$(date -d ${{ steps.iso_build_date.outputs.date }} +"%Y/%m/%d")" >> "$GITHUB_ENV"
+      - name: Get Artifact URL
+        id: get_iso_artifact
+        run: |
+          iso_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-    - name: Create Release
-      uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8
-      if: success() && github.ref == 'refs/heads/main'
-      with:
-        tag_name: v${{ env.VERSION }}
-        name: Felux ${{ env.VERSION }}
-        body: |
-          Felux ${{ env.VERSION }} (Based on Fedora ${{ env.VERSION }})
+          echo "iso_url=$iso_url" >> $GITHUB_ENV
 
-          last built on: ${{ env.formatted_date }}
+      - name: Generate Changelog
+        run: |
+          git_chglog="github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4"
+          changelog="$(go run $git_chglog --silent --next-tag v${{ env.release_ver }} v${{ env.release_ver }})"
 
-          The ISO file is available as a GitHub Actions artifact due to file size limitations.
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-          [Download ISO Artifact](${{ steps.upload.outputs.artifact_url }})
+      - name: Create Release
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8
+        if: success() && github.ref == 'refs/heads/main'
+        with:
+          tag_name: v${{ env.release_ver }}
+          name: Felux ${{ env.release_ver }}
+          body: |
+            ${{ env.CHANGELOG }}
 
-          Note: You need to be logged in to GitHub to download the artifact.
+            ---
 
-          Checksum file is attached to this release.
+            Felux ${{ env.release_ver }} (Based on Fedora ${{ env.VERSION }})
 
-          ISO Filename: ${{ steps.build.outputs.iso_name }}
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            The ISO file is available as a GitHub Actions artifact due to file size limitations.
+
+            [Download ${{ steps.build.outputs.iso_name }}](${{ env.iso_url }})
+
+            Note: You need to be logged in to GitHub to download the artifact.
+          draft: false
+          prerelease: false
+          files: |
+            ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,24 +2,34 @@
 name: Build Main Image
 
 on:
-  pull_request:
-    branches:
-      - main
   schedule:
     - cron: '05 10 * * *'  # 10:05am UTC everyday
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/README.md'
   workflow_dispatch:
 
 jobs:
+  fetch-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Latest Release Tag
+        run: |
+          latest_tag=$(git tag --sort=-creatordate | head -n 1)
+          echo "Latest tag is $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+    outputs:
+      latest-tag: ${{ env.latest_tag }}
+
   build:
+    needs: fetch-release
     uses: ./.github/workflows/build-image-reusable.yml
     with:
       image-name: ${{ github.event.repository.name }}
       image-description: Main image for ${{ github.event.repository.name }}
+      ref: ${{ needs.fetch-release.outputs.latest-tag }}
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     permissions:
