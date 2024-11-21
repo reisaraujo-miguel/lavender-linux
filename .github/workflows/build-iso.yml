@@ -62,9 +62,8 @@ jobs:
       - name: Get Artifact URL
         id: get_iso_artifact
         run: |
-          artifacts=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts")
-          iso_url=$(echo "$artifacts" | jq -r '.artifacts[0].archive_download_url')
+          iso_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
           echo "iso_url=$iso_url" >> $GITHUB_ENV
 
       - name: Generate Changelog
