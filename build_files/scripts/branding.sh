@@ -44,8 +44,6 @@ check_and_modify() {
     fi
 }
 
-check_and_modify "/etc/yafti.yml" "\bAurora-dx\b" "Felux"
-
 check_and_modify "/usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc" "getaurora\.dev" "github\.com\/reisaraujo-miguel\/felux"
 check_and_modify "/usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc" "\bAurora-DX\b" "Felux"
 
