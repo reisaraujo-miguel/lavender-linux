@@ -24,11 +24,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get Release Version
         id: get_version
         run: |
-          echo "release_ver=$(cat ./version.txt)" >> $GITHUB_ENV
+          echo "release_ver=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Build ISO
         uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743
@@ -44,7 +46,7 @@ jobs:
           enrollment_password: universalblue
           enable_cache_dnf: false
           enable_cache_skopeo: false
-          iso_name: ${{ env.IMAGE_NAME }}-v${{ env.release_ver }}.iso
+          iso_name: ${{ env.IMAGE_NAME }}-${{ env.release_ver }}.iso
           flatpak_remote_name: flathub
           flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
           flatpak_remote_refs_dir: /github/workspace/flatpak_refs
@@ -69,17 +71,18 @@ jobs:
       - name: Generate Changelog
         run: |
           git_chglog="github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4"
-          changelog="$(go run $git_chglog --silent --next-tag v${{ env.release_ver }} v${{ env.release_ver }})"
+
+          go run $git_chglog -o changelog.md --silent ${{ env.release_ver }}
 
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$changelog" >> $GITHUB_ENV
+          echo "$(cat changelog.md)" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Create Release
         uses: softprops/action-gh-release@01570a1f39cb168c169c802c3bceb9e93fb10974
-        if: success() && github.ref == 'refs/heads/main'
+        if: github.event_name != 'workflow_dispatch'
         with:
-          tag_name: v${{ env.release_ver }}
+          tag_name: ${{ env.release_ver }}
           name: Felux ${{ env.release_ver }}
           body: |
             ${{ env.CHANGELOG }}
@@ -93,7 +96,7 @@ jobs:
             [Download ${{ steps.build.outputs.iso_name }}](${{ env.iso_url }})
 
             Note: You need to be logged in to GitHub to download the artifact.
-          draft: false
+          draft: true
           prerelease: false
           files: |
             ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
