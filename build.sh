@@ -64,8 +64,6 @@ main() {
 
 	# Configure Desktop Environment
     execute_script "branding.sh"
-	execute_script "configure-theme.sh"
-    execute_script "configure-kitty.sh"
     execute_script "configure-zsh.sh"
     execute_script "set-wallpaper.sh"
 
