@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
 # enable kitty shell integration even if inside toolbox/distrobox
-if test -n "/usr/lib64/kitty"; then
+if [ -d "/usr/lib64/kitty/shell-integration/zsh" ] && [[ "$TERM" == "xterm-kitty" ]]; then
   export KITTY_SHELL_INTEGRATION="enabled"
-  autoload -Uz -- /usr/lib64/kitty/shell-integration/zsh/kitty-integration
+  autoload -Uz /usr/lib64/kitty/shell-integration/zsh/kitty-integration
   kitty-integration
   unfunction kitty-integration
 fi
