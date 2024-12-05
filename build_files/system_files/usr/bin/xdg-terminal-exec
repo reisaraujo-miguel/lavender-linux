@@ -2,7 +2,7 @@
 
 if command -v /usr/bin/kitty > /dev/null; then
   if [[ -z "$@" ]]; then
-    /usr/bin/kity --new-window
+    /usr/bin/kitty --new-window
   else
     /usr/bin/kitty -- "$@"
   fi
