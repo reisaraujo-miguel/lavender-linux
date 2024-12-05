@@ -18,7 +18,7 @@ font-antialiasing="rgba"
 font-name="Inter 12"
 document-font-name="Inter 12"
 monospace-font-name="JetBrains Mono 18"
-accent-color="slate"
+accent-color="purple"
 
 [org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
