@@ -19,6 +19,7 @@ font-name="Inter 12"
 document-font-name="Inter 12"
 monospace-font-name="JetBrains Mono 18"
 accent-color="purple"
+color-scheme="prefer-dark"
 
 [org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
