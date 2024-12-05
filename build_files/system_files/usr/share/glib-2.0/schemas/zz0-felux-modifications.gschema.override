@@ -20,6 +20,7 @@ document-font-name="Inter 12"
 monospace-font-name="JetBrains Mono 12"
 accent-color="purple"
 color-scheme="prefer-dark"
+icon-theme="MoreWaita"
 
 [org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
