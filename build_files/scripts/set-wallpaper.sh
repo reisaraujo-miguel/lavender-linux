@@ -2,5 +2,6 @@
 
 set -ouex pipefail
 
-ln -sf /usr/share/wallpapers/Felux/contents/images/6000x4000.jpg /usr/share/backgrounds/default.png
-ln -sf /usr/share/wallpapers/Felux/contents/images/6000x4000.jpg /usr/share/backgrounds/default-dark.png
+# remove bluefin wallpapers
+rm -r /usr/share/backgrounds/bluefin
+rm /usr/share/backgrounds/chicken.webp

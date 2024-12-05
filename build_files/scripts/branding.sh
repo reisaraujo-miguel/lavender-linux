@@ -7,16 +7,16 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-sed -i -e 's/getaurora\.dev/github\.com\/reisaraujo-miguel\/felux/' \
+sed -i -e 's/projectbluefin\.io/github\.com\/reisaraujo-miguel\/felux/' \
     -e 's/ublue-os\/bluefin/reisaraujo-miguel\/felux/' \
-    -e 's/\bAurora-dx\b/Felux/g' \
-    -e 's/\bAurora\b/Felux/g' \
-    -e 's/\baurora-dx\b/felux/g' \
-    -e 's/\baurora\b/felux/g' \
+    -e 's/\bBluefin-dx\b/Felux/g' \
+    -e 's/\bBluefin\b/Felux/g' \
+    -e 's/\bbluefin-dx\b/felux/g' \
+    -e 's/\bbluefin\b/felux/g' \
     /usr/lib/os-release
 
 # Validate changes before replacing
-if grep -Eq "aurora|Aurora" /usr/lib/os-release; then
+if grep -Eq "bluefin|Bluefin" /usr/lib/os-release; then
     echo "Error: Branding replacement incomplete" >&2
     exit 1
 fi
@@ -44,13 +44,10 @@ check_and_modify() {
     fi
 }
 
-check_and_modify "/usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc" "getaurora\.dev" "github\.com\/reisaraujo-miguel\/felux"
-check_and_modify "/usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc" "\bAurora-DX\b" "Felux"
+check_and_modify "/usr/share/ublue-os/image-info.json" "\bbluefin-dx\b" "felux"
+check_and_modify "/usr/share/ublue-os/image-info.json" "ublue-os\/bluefin-dx" "reisaraujo-miguel\/felux"
 
-check_and_modify "/usr/share/ublue-os/image-info.json" "\baurora-dx\b" "felux"
-check_and_modify "/usr/share/ublue-os/image-info.json" "ublue-os\/aurora-dx" "reisaraujo-miguel\/felux"
-
-check_and_modify "/usr/share/applications/system-update.desktop" "Aurora" "Felux"
-check_and_modify "/usr/share/ublue-os/motd/tips/10-tips.md" "Aurora" "Felux"
-check_and_modify "/usr/libexec/ublue-flatpak-manager" "Aurora" "Felux"
-check_and_modify "/usr/share/ublue-os/motd/bluefin.md" "Aurora" "Felux"
+check_and_modify "/usr/share/applications/system-update.desktop" "Bluefin" "Felux"
+check_and_modify "/usr/share/ublue-os/motd/tips/10-tips.md" "Bluefin" "Felux"
+check_and_modify "/usr/libexec/ublue-flatpak-manager" "Bluefin" "Felux"
+check_and_modify "/usr/share/ublue-os/motd/bluefin.md" "Bluefin" "Felux"

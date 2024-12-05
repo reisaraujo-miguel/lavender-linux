@@ -7,3 +7,9 @@ if [[ -d "$SYSTEM_FILES_DIR" ]]; then
 else
     echo "Warning: System files directory not found"
 fi
+
+# Remove Bluefin gschema override
+rm /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
+
+# Compile schemas
+glib-compile-schemas /usr/share/glib-2.0/schemas/
