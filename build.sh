@@ -4,7 +4,7 @@ set -ouex pipefail
 
 # Constants
 export RELEASE="$(rpm -E %fedora)"
-export BUILD_FILES_DIR="/tmp/build_files"
+export BUILD_FILES_DIR="/tmp"
 export SCRIPTS_DIR="${BUILD_FILES_DIR}/scripts"
 export SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
 
