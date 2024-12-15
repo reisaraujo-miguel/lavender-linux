@@ -27,20 +27,20 @@ check_and_modify() {
     local replacement="$3"
 
     if [ -f "$file" ]; then
-		# Perform replacement
-		if ! sed -i "s@${pattern}@${replacement}@g" "$file"; then
-			echo "Error: Pattern replacement failed" >&2
-			return 1
-		fi
+        # Perform replacement
+        if ! sed -i "s@${pattern}@${replacement}@g" "$file"; then
+            echo "Error: Pattern replacement failed" >&2
+            return 1
+        fi
 
-		# Validate changes
-		if grep -Eq "$pattern" "$file"; then
-			echo "Warning: Pattern still exists after replacement in $file" >&2
-			return 1
-		fi
+        # Validate changes
+        if grep -Eq "$pattern" "$file"; then
+            echo "Warning: Pattern still exists after replacement in $file" >&2
+            return 1
+        fi
     else
         echo "Warning: File $file not found, skipping modification"
-		return 1
+        return 1
     fi
 }
 

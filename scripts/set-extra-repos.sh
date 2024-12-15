@@ -19,5 +19,9 @@ install_copr_repo "dusansimic" "themes"
 # enable rpmfusion-nonfree-steam
 steam_repo="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
 
-[ ! -f "$steam_repo" ] && { echo "Steam repo file not found"; exit 1; }
+[ ! -f "$steam_repo" ] && {
+	echo "Steam repo file not found"
+	exit 1
+}
+
 sed -i "s/^enabled=.*/enabled=1/" "$steam_repo"
