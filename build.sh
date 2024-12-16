@@ -40,27 +40,28 @@ execute_script() {
 
 install_packages() {
     local pkg_file="$1"
-    local retries=3
-    local attempt=1
 
-    while [ "$attempt" -le "$retries" ]; do
-        if rpm-ostree install --idempotent -y "$(cat "$pkg_file")"; then
-            return 0
-        fi
-        attempt=$((attempt + 1))
-        [ "$attempt" -le "$retries" ] && sleep 5
-    done
+    mapfile -t packages <"$pkg_file"
 
-    echo "Failed to install packages after $retries attempts"
+    if rpm-ostree install --idempotent -y "${packages[@]}"; then
+        return 0
+    fi
+
     return 1
 }
 
 remove_packages() {
     local pkg_file="$1"
-    rpm-ostree override remove "$(cat "$pkg_file")" --install neovim-default-editor
 
-    rm /etc/profile.d/vscode-bluefin-profile.sh
-    rm -r /etc/skel/.config/Code/
+    mapfile -t packages <"$pkg_file"
+
+    if rpm-ostree override remove "${packages[@]}" --install neovim-default-editor; then
+        rm /etc/profile.d/vscode-bluefin-profile.sh
+        rm -r /etc/skel/.config/Code/
+        return 0
+    fi
+
+    return 1
 }
 
 # Main Installation Steps
