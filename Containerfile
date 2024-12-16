@@ -5,12 +5,11 @@ ARG SOURCE_TAG="latest"
 FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
 
 # copy build files
-COPY build.sh /tmp/build.sh
-COPY build_files /tmp/build_files
+COPY ./ /tmp/
 
 RUN mkdir -p /var/lib/alternatives \
 	&& chmod +x /tmp/build.sh \
-	&& chmod +x /tmp/build_files/scripts/* \
+	&& chmod +x /tmp/scripts/* \
 	&& /tmp/build.sh \
 	&& ostree container commit
 
