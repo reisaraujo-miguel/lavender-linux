@@ -33,7 +33,7 @@ jobs:
           echo "release_ver=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Build ISO
-        uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743
+        uses: jasonn3/build-container-installer@f09a756b7a1205f121d8508f1171759328b95d2c
         id: build
         with:
           arch: ${{ env.ARCH }}
