@@ -15,6 +15,7 @@ function install_copr_repo() {
 install_copr_repo "atim" "lazygit"
 install_copr_repo "vitallium" "neovim-default-editor"
 install_copr_repo "dusansimic" "themes"
+install_copr_repo "pgdev" "ghostty"
 
 # enable rpmfusion-nonfree-steam
 steam_repo="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
