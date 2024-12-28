@@ -1,13 +1,13 @@
 #!/usr/bin/bash
 
-if command -v /usr/bin/kitty > /dev/null; then
-  if [[ -z "$@" ]]; then
-    /usr/bin/kitty --new-window
+if command -v /usr/bin/kitty >/dev/null; then
+  if [[ -z "$*" ]]; then
+    ghostty --new-window
   else
-    /usr/bin/kitty -- "$@"
+    ghostty -- "$@"
   fi
-elif grep '^org\.gnome\.Ptyxis$' <<< $(/usr/bin/flatpak list --app --columns=application); then
-  if [[ -z "$@" ]]; then
+elif grep '^org\.gnome\.Ptyxis$' <<<"$(/usr/bin/flatpak list --app --columns=application)"; then
+  if [[ -z "$*" ]]; then
     /usr/bin/flatpak run org.gnome.Ptyxis --new-window
   else
     /usr/bin/flatpak run org.gnome.Ptyxis -- "$@"
