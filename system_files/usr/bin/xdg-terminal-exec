@@ -4,14 +4,14 @@ if command -v ghostty >/dev/null; then
   if [[ -z "$*" ]]; then
     ghostty --new-window
   else
-    ghostty -- "$@"
+    ghostty -- "$*"
   fi
 elif grep '^org\.gnome\.Ptyxis$' <<<"$(flatpak list --app --columns=application)"; then
   if [[ -z "$*" ]]; then
     flatpak run org.gnome.Ptyxis --new-window
   else
-    flatpak run org.gnome.Ptyxis -- "$@"
+    flatpak run org.gnome.Ptyxis -- "$*"
   fi
 else
-  gnome-terminal -- "$@"
+  gnome-terminal -- "$*"
 fi
