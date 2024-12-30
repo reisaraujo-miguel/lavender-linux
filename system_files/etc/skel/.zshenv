@@ -14,9 +14,4 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export ZDOTDIR="$HOME/.config/zsh"
 export HISTFILE="$XDG_DATA_HOME/zsh-history"
 
-# https://blog.patshead.com/2011/04/improve-your-oh-my-zsh-startup-time-maybe.html
-skip_global_compinit=1
-
-export SYSTEM=$(uname -s)
-export SHELL=/bin/zsh
-
+source "${ZDOTDIR:-$HOME}/.zshenv"
