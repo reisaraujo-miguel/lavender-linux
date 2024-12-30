@@ -4,7 +4,7 @@ name: Build Release ISO
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 env:
@@ -16,7 +16,17 @@ env:
   VARIANT: Kinoite
 
 jobs:
-  build:
+  build-image:
+    uses: ./.github/workflows/build-image-main.yml
+    secrets:
+      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      id-token: write
+
+  build-iso:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -49,7 +59,7 @@ jobs:
           iso_name: ${{ env.IMAGE_NAME }}-${{ env.release_ver }}.iso
           flatpak_remote_name: flathub
           flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
-          flatpak_remote_refs_dir: /github/workspace/flatpak_refs
+          flatpak_remote_refs_dir: /github/workspace/flatpak_refs/
 
       - name: Upload ISO as artifact
         id: upload
