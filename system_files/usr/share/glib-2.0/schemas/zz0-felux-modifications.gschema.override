@@ -76,7 +76,7 @@ download-updates=false
 download-updates-notify=false
 
 [com.github.stunkymonkey.nautilus-open-any-terminal]
-terminal='kitty'
+terminal='ghostty'
 keybindings=''
 new-tab=false
 flatpak='off'
