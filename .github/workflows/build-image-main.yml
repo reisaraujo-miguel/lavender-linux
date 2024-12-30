@@ -3,7 +3,8 @@ name: Build Main Image
 
 on:
   schedule:
-    - cron: '05 10 * * *'  # 10:05am UTC everyday
+    - cron: "05 10 * * *" # 10:05am UTC everyday
+  workflow_call:
   workflow_dispatch:
 
 jobs:
