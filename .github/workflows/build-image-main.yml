@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC everyday
   workflow_call:
+    secrets:
+      SIGNING_SECRET:
+        required: false
   workflow_dispatch:
 
 jobs:
