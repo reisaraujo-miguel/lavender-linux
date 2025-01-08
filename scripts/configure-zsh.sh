@@ -2,5 +2,4 @@
 
 set -ouex pipefail
 
-rm /etc/skel/.zshrc
-rm /etc/skel/.zprofile
+sed -i '/setopt noglobalrcs/d' /etc/zsh/zshenv
