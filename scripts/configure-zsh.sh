@@ -2,4 +2,9 @@
 
 set -ouex pipefail
 
-sed -i '/setopt noglobalrcs/d' /etc/zsh/zshenv
+for FILE in /etc/zsh/*; do
+  if [ -f "$FILE" ]; then
+    BASENAME=$(basename "$FILE")
+    cp "$FILE" /etc/skel/.config/zsh/."$BASENAME"
+  fi
+done
