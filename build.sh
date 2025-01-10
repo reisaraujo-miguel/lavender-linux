@@ -77,11 +77,11 @@ main() {
 
     # Configure Desktop Environment
     execute_script "branding.sh"
-    execute_script "configure-zsh.sh"
     execute_script "set-wallpaper.sh"
 
     # Install System Files
     execute_script "copy-system-files.sh"
+    execute_script "configure-zsh.sh"
 
     # Disbale extra repos
     execute_script "unset-extra-repos.sh"
