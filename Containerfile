@@ -11,7 +11,8 @@ RUN mkdir -p /var/lib/alternatives \
 	&& chmod +x /tmp/build.sh \
 	&& chmod +x /tmp/scripts/* \
 	&& /tmp/build.sh \
-	&& ostree container commit
+	&& ostree container commit \
+	&& bootc container lint
 
 ## NOTES:
 # - /var/lib/alternatives is required to prevent failure with some RPM installs
