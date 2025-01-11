@@ -16,13 +16,11 @@ install_copr_repo "atim" "lazygit"
 install_copr_repo "vitallium" "neovim-default-editor"
 install_copr_repo "dusansimic" "themes"
 install_copr_repo "pgdev" "ghostty"
+install_copr_repo "kylegospo" "bazzite"
+install_copr_repo "kylegospo" "bazzite-multilib"
+install_copr_repo "kylegospo" "LatencyFleX"
 
-# enable rpmfusion-nonfree-steam
-steam_repo="/etc/yum.repos.d/rpmfusion-nonfree-steam.repo"
-
-[ ! -f "$steam_repo" ] && {
-	echo "Steam repo file not found"
-	exit 1
-}
-
-sed -i "s/^enabled=.*/enabled=1/" "$steam_repo"
+# enable rpmfusion
+for FILE in /etc/yum.repos.d/rpmfusion*; do
+	sed -i "s/^enabled=.*/enabled=1/" "$FILE"
+done
