@@ -12,7 +12,10 @@ while IFS= read -r repo; do
 	fi
 
 	echo "Enabling Copr repository: $repo"
-	dnf5 -y copr enable "$repo"
+	if ! dnf5 -y copr enable "$repo"; then
+		echo "Error: Failed to enable repository: $repo" >&2
+		exit 1
+	fi
 done <"$file"
 
 # enable rpmfusion
