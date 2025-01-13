@@ -43,7 +43,7 @@ install_packages() {
 
     mapfile -t packages <"$pkg_file"
 
-    if rpm-ostree install --idempotent -y "${packages[@]}"; then
+    if dnf5 -y install "${packages[@]}" --allowerasing; then
         return 0
     fi
 
@@ -55,7 +55,7 @@ remove_packages() {
 
     mapfile -t packages <"$pkg_file"
 
-    if rpm-ostree override remove "${packages[@]}" --install neovim-default-editor; then
+    if dnf5 -y remove "${packages[@]}"; then
         rm /etc/profile.d/vscode-bluefin-profile.sh
         rm -r /etc/skel/.config/Code/
         return 0
@@ -66,7 +66,7 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-    # Install Copr Repos
+    # Enable extra repos
     execute_script "set-extra-repos.sh"
 
     # Install Required Packages
@@ -75,6 +75,9 @@ main() {
     # Remove Unwanted Packages
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
 
+    # Disbale extra repos
+    execute_script "unset-extra-repos.sh"
+
     # Configure Desktop Environment
     execute_script "branding.sh"
     execute_script "set-wallpaper.sh"
@@ -82,9 +85,6 @@ main() {
     # Install System Files
     execute_script "copy-system-files.sh"
     execute_script "configure-zsh.sh"
-
-    # Disbale extra repos
-    execute_script "unset-extra-repos.sh"
 }
 
 main

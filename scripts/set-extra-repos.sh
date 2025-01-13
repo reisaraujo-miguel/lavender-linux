@@ -2,23 +2,21 @@
 
 set -ouex pipefail
 
-# install new repos
-function install_copr_repo() {
-	local package_maintainer="$1"
-	local package_name="$2"
-	local repo_file="/etc/yum.repos.d/${package_maintainer}-${package_name}-fedora-${RELEASE}.repo"
-	local repo_url="https://copr.fedorainfracloud.org/coprs/${package_maintainer}/${package_name}/repo/fedora-${RELEASE}/${package_maintainer}-${package_name}-fedora-${RELEASE}.repo"
+file=${BUILD_FILES_DIR}/copr-repos
 
-	curl -Lo "$repo_file" "$repo_url"
-}
+# Loop through each line in the file
+while IFS= read -r repo; do
+	# Skip empty lines and lines starting with #
+	if [[ -z "$repo" || "$repo" == \#* ]]; then
+		continue
+	fi
 
-install_copr_repo "atim" "lazygit"
-install_copr_repo "vitallium" "neovim-default-editor"
-install_copr_repo "dusansimic" "themes"
-install_copr_repo "pgdev" "ghostty"
-install_copr_repo "kylegospo" "bazzite"
-install_copr_repo "kylegospo" "bazzite-multilib"
-install_copr_repo "kylegospo" "LatencyFleX"
+	echo "Enabling Copr repository: $repo"
+	if ! dnf5 -y copr enable "$repo"; then
+		echo "Error: Failed to enable repository: $repo" >&2
+		exit 1
+	fi
+done <"$file"
 
 # enable rpmfusion
 for FILE in /etc/yum.repos.d/rpmfusion*; do

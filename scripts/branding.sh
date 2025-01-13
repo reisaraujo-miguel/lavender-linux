@@ -50,4 +50,5 @@ check_and_modify "/usr/share/ublue-os/image-info.json" "ublue-os\/bluefin-dx" "r
 check_and_modify "/usr/share/applications/system-update.desktop" "Bluefin" "Felux"
 check_and_modify "/usr/share/ublue-os/motd/tips/10-tips.md" "Bluefin" "Felux"
 check_and_modify "/usr/libexec/ublue-flatpak-manager" "Bluefin" "Felux"
-check_and_modify "/usr/share/ublue-os/motd/bluefin.md" "Bluefin" "Felux"
+check_and_modify "/usr/share/ublue-os/motd/20-bluefin.md" "Bluefin" "Felux"
+check_and_modify "/usr/share/ublue-os/motd/template.md" "Bluefin" "Felux"
