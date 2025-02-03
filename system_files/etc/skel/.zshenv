@@ -13,5 +13,7 @@ export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export ZDOTDIR="$HOME/.config/zsh"
 export HISTFILE="$XDG_DATA_HOME/zsh-history"
+export HISTSIZE=10000
+export SAVEHIST=10000
 
 source "${ZDOTDIR:-$HOME}/.zshenv"
