@@ -11,7 +11,10 @@ fira-code-fonts
 morewaita-icon-theme
 wine
 gamescope
+gamescope-libs.x86_64
+gamescope-libs.i686
 gamescope-shaders
+scx-scheds
 latencyflex-vulkan-layer
 gnome-randr-rust
 wlr-randr
