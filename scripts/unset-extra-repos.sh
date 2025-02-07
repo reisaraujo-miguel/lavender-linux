@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-repos=$(dnf5 repo list --json --all | jq -r '.[].id')
+repos=$(dnf5 repo list --json | jq -r '.[].id')
 
 for repo in $repos; do
 	echo "Disabling repository: $repo"
