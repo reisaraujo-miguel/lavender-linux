@@ -21,6 +21,7 @@ app/org.gnome.SimpleScan/x86_64/stable
 app/org.gnome.TextEditor/x86_64/stable
 app/org.gnome.Weather/x86_64/stable
 app/org.gnome.World.PikaBackup/x86_64/stable
+app/io.missioncenter.MissionCenter/x86_64/stable
 app/com.mattjakeman.ExtensionManager/x86_64/stable
 app/org.fedoraproject.MediaWriter/x86_64/stable
 app/io.github.celluloid_player.Celluloid/x86_64/stable
