@@ -1,6 +1,3 @@
-dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
-dnf5 -y config-manager setopt "*terra*".priority=3 "*terra*".exclude='nerd-fonts topgrade'
-
 # Install Valve's patched Mesa, Pipewire, Bluez, and Xwayland
 bazzite_packages="pipewire bluez xorg-x11-server-Xwayland"
 
