@@ -21,4 +21,4 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 curl -L --create-dirs -o /etc/scx_loader/config.toml https://raw.githubusercontent.com/ublue-os/bazzite/main/system_files/desktop/shared/etc/scx_loader/config.toml
 
-curl -L --create-dirs -o /usr/lib/sysctl.d/10-map-count.conf https://github.com/ublue-os/bazzite/main/system_files/desktop/shared/usr/lib/sysctl.d/70-gaming.conf
+curl -L --create-dirs -o /usr/lib/sysctl.d/10-map-count.conf https://raw.githubusercontent.com/ublue-os/bazzite/main/system_files/desktop/shared/usr/lib/sysctl.d/70-gaming.conf
