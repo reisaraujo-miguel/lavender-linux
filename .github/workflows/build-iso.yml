@@ -110,7 +110,7 @@ jobs:
             [Download ${{ steps.build.outputs.iso_name }}](${{ env.iso_url }})
 
             Note: You need to be logged in to GitHub to download the artifact.
-          draft: true
+          draft: false
           prerelease: false
           files: |
             ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
