@@ -54,7 +54,5 @@ curl -L --create-dirs -o /usr/lib/sysctl.d/10-map-count.conf https://raw.githubu
 
 # Download dotfiles
 
-mkdir -p /etc/skel/
-
 git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
 bash /tmp/dotfiles/install.sh -d /etc/skel -e nvim
