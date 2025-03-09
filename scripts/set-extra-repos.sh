@@ -31,10 +31,8 @@ dnf5 -y config-manager setopt "*bazzite*".priority=1
 dnf5 -y config-manager setopt "*akmods*".priority=2
 dnf5 -y config-manager setopt "*terra*".priority=3
 dnf5 -y config-manager setopt "*rpmfusion*".priority=4
-dnf5 -y config-manager setopt "negativo17 - Steam".priority=4
 
 dnf5 -y config-manager setopt "*rpmfusion*".exclude="mesa-*"
 dnf5 -y config-manager setopt "*fedora*".exclude="mesa-*"
 dnf5 -y config-manager setopt "*staging*".exclude="scx-scheds mesa*"
 dnf5 -y config-manager setopt "*terra*".exclude="nerd-fonts topgrade"
-dnf5 -y config-manager setopt "negativo17 - Steam".exclude="mesa-* *xone*"
