@@ -23,6 +23,9 @@ for repo in $rpmfusion_repos; do
 done
 
 dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
+dnf5 -y config-manager setopt "terra-mesa".enabled=true
+
+dnf5 -y config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-steam.repo
 
 dnf5 -y config-manager setopt "*bazzite*".priority=1
 dnf5 -y config-manager setopt "*akmods*".priority=2
