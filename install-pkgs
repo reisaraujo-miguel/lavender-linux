@@ -4,12 +4,13 @@ git-delta
 ghostty
 zsh-autosuggestions
 zsh-syntax-highlighting
-steam-devices
 eza
 bat
 bat-extras
 fira-code-fonts
 morewaita-icon-theme
+steam
+steam-devices
 scx-scheds
 gamescope
 gamescope-libs.x86_64
