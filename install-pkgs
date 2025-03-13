@@ -10,14 +10,3 @@ bat
 bat-extras
 fira-code-fonts
 morewaita-icon-theme
-steam
-steam-devices
-scx-scheds
-gamescope
-gamescope-libs.x86_64
-gamescope-libs.i686
-gamescope-shaders
-vulkan-tools
-latencyflex-vulkan-layer
-gnome-randr-rust
-wlr-randr

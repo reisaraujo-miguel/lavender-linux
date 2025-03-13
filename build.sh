@@ -75,17 +75,10 @@ main() {
     # Remove Unwanted Packages
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
 
-    # Swap packages for bazzite version
-    execute_script "swap-patched-bazzite-packages.sh"
-
-    # Disbale extra repos
-    execute_script "unset-extra-repos.sh"
-
-    # Configure SCX
-    sed -i "s/^SCX_SCHEDULER=.*/SCX_SCHEDULER=scx_lavd/" /etc/default/scx
-
     # Configure Desktop Environment
     execute_script "update-system-files.sh"
+
+    execute_script "unset-extra-repos.sh"
 }
 
 main
