@@ -2,8 +2,7 @@
 
 set -ouex pipefail
 
-dnf5 -y install dnf-plugins-core
-dnf5 -y config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+dnf5 -y config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 
 file=$(cat "${BUILD_FILES_DIR}/copr-repos")
 
