@@ -1,6 +1,7 @@
 neovim
 neovim-default-editor
 git-delta
+lazygit
 ghostty
 zsh-autosuggestions
 zsh-syntax-highlighting
