@@ -26,23 +26,19 @@ replace_line() {
 }
 
 # Change some lines on gschema
-schemas_file=/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
-
-replace_line $schemas_file "favorite-apps" \
+replace_line "zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
 	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'com.mitchellh.ghostty.desktop']"
 
-replace_line $schemas_file "enabled-extensions" \
+replace_line "zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
 	"enabled-extensions = ['gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com', 'caffeine@patapon.info']"
 
-replace_line $schemas_file "accent-color" "accent-color=\"purple\""
+replace_line "zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "[org.gnome.desktop.interface]" \
+	"[org.gnome.desktop.interface]
+icon-theme=\"MoreWaita\""
 
-replace_line $schemas_file "color-scheme" "color-scheme=\"prefer-dark\""
+replace_line "zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
 
-replace_line $schemas_file "icon-theme" "icon-theme=\"MoreWaita\""
-
-replace_line $schemas_file "button-layout" "button-layout=\":close\""
-
-replace_line $schemas_file "terminal=" "terminal='ghostty'"
+replace_line "zz0-00-bazzite-desktop-silverblue-global.gschema.override" "terminal=" "terminal='ghostty'"
 
 # Compile schemas
 glib-compile-schemas /usr/share/glib-2.0/schemas/
