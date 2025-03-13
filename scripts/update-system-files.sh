@@ -26,22 +26,24 @@ replace_line() {
 }
 
 # Change some lines on gschema
-replace_line "zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
+SCHEMAS_FOLDER=/usr/share/glib-2.0/schemas/
+
+replace_line "$SCHEMAS_FOLDER/zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
 	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'com.mitchellh.ghostty.desktop']"
 
-replace_line "zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
+replace_line "$SCHEMAS_FOLDER/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
 	"enabled-extensions = ['gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com', 'caffeine@patapon.info']"
 
-replace_line "zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "[org.gnome.desktop.interface]" \
+replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "[org.gnome.desktop.interface]" \
 	"[org.gnome.desktop.interface]
 icon-theme=\"MoreWaita\""
 
-replace_line "zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
+replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
 
-replace_line "zz0-00-bazzite-desktop-silverblue-global.gschema.override" "terminal=" "terminal='ghostty'"
+replace_line "$SCHEMAS_FOLDER/zz0-00-bazzite-desktop-silverblue-global.gschema.override" "terminal=" "terminal='ghostty'"
 
 # Compile schemas
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+glib-compile-schemas "$SCHEMAS_FOLDER"
 
 # Download dotfiles
 
