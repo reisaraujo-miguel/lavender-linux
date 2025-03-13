@@ -68,7 +68,9 @@ main() {
     execute_script "set-extra-repos.sh"
 
     # Install Required Packages
-    install_packages "${BUILD_FILES_DIR}/install-pkgs"
+    install_packages "${BUILD_FILES_DIR}/bluefin-base-packages"
+    install_packages "${BUILD_FILES_DIR}/dx-packages"
+    install_packages "${BUILD_FILES_DIR}/extra-packages"
 
     # Remove Unwanted Packages
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
