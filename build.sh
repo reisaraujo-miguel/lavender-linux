@@ -56,8 +56,6 @@ remove_packages() {
     mapfile -t packages <"$pkg_file"
 
     if dnf5 -y remove "${packages[@]}"; then
-        rm /etc/profile.d/vscode-bluefin-profile.sh
-        rm -r /etc/skel/.config/Code/
         return 0
     fi
 
