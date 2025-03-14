@@ -64,6 +64,10 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
+    echo "::group:: === Download Configs From Bluefin ==="
+    execute_script "configs-from-bluefin.sh"
+    echo "::endgroup::"
+
     echo "::group:: === Set Extra Repos ==="
     execute_script "set-extra-repos.sh"
     echo "::endgroup::"
