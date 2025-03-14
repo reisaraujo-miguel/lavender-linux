@@ -7,6 +7,7 @@ cockpit-machines
 cockpit-ostree
 containerd.io
 devpod
+DevPod
 docker-ce
 docker-ce-cli
 docker-buildx-plugin
