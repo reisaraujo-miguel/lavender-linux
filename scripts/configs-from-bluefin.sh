@@ -2,8 +2,6 @@
 
 set -ouex pipefail
 
-echo '::group:: === Download System Config Files From Bluefin ==='
-
 curl -Lo /usr/lib/sysctl.d/docker-ce.conf "https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/system_files/dx/usr/lib/sysctl.d/docker-ce.conf"
 
 curl -Lo /usr/lib/systemd/system/bluefin-dx-groups.service "https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/system_files/dx/usr/lib/systemd/system/bluefin-dx-groups.service"
@@ -25,5 +23,3 @@ curl -Lo /usr/libexec/bluefin-dx-groups "https://raw.githubusercontent.com/ublue
 curl -Lo /usr/libexec/bluefin-dx-kvmfr-setup "https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/system_files/dx/usr/libexec/bluefin-dx-kvmfr-setup"
 
 curl -Lo /usr/libexec/bluefin-incus "https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/system_files/dx/usr/libexec/bluefin-incus"
-
-echo '::endgroup::'
