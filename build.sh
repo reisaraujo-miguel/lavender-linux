@@ -64,21 +64,44 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-    # Enable extra repos
+    echo "::group:: === Set Extra Repos ==="
     execute_script "set-extra-repos.sh"
+    echo "::endgroup::"
 
-    # Install Required Packages
+    echo "::group:: === Install Bluefin Base Packages ==="
     install_packages "${BUILD_FILES_DIR}/bluefin-base-packages"
+    echo "::endgroup::"
+
+    # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
+    sysctl -p
+
+    echo "::group:: === Install DX Packages ==="
     install_packages "${BUILD_FILES_DIR}/dx-packages"
+    echo "::endgroup::"
+
+    echo "::group:: === Install Extra Packages ==="
     install_packages "${BUILD_FILES_DIR}/extra-packages"
+    echo "::endgroup::"
 
-    # Remove Unwanted Packages
+    echo "::group:: === Remove Unwanted Packages ==="
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
+    echo "::endgroup::"
 
-    # Configure Desktop Environment
+    echo "::group:: === Configure Desktop Environment ==="
     execute_script "update-system-files.sh"
+    echo "::endgroup::"
 
+    echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Enable SystemCTL Services ==="
+    systemctl enable docker.socket
+    systemctl enable podman.socket
+    systemctl enable swtpm-workaround.service
+    systemctl enable libvirt-workaround.service
+    systemctl enable bluefin-dx-groups.service
+    echo "::endgroup::"
 }
 
 main
