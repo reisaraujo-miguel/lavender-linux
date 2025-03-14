@@ -46,5 +46,4 @@ glib-compile-schemas "$SCHEMAS_FOLDER"
 
 # Download dotfiles
 
-git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
-bash /tmp/dotfiles/install.sh -d /etc/skel -e nvim
+git clone https://github.com/reisaraujo-miguel/my-dot-files.git /etc/skel/.config/dotfiles
