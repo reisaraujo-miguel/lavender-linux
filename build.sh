@@ -56,8 +56,6 @@ remove_packages() {
     mapfile -t packages <"$pkg_file"
 
     if dnf5 -y remove "${packages[@]}"; then
-        rm /etc/profile.d/vscode-bluefin-profile.sh
-        rm -r /etc/skel/.config/Code/
         return 0
     fi
 
@@ -66,26 +64,48 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-    # Enable extra repos
+    echo "::group:: === Download Configs From Bluefin ==="
+    execute_script "configs-from-bluefin.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Set Extra Repos ==="
     execute_script "set-extra-repos.sh"
+    echo "::endgroup::"
 
-    # Install Required Packages
-    install_packages "${BUILD_FILES_DIR}/install-pkgs"
+    echo "::group:: === Install Bluefin Base Packages ==="
+    install_packages "${BUILD_FILES_DIR}/bluefin-base-packages"
+    echo "::endgroup::"
 
-    # Remove Unwanted Packages
+    # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
+    sysctl -p
+
+    echo "::group:: === Install DX Packages ==="
+    install_packages "${BUILD_FILES_DIR}/dx-packages"
+    echo "::endgroup::"
+
+    echo "::group:: === Install Extra Packages ==="
+    install_packages "${BUILD_FILES_DIR}/extra-packages"
+    echo "::endgroup::"
+
+    echo "::group:: === Remove Unwanted Packages ==="
     remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
+    echo "::endgroup::"
 
-    # Swap packages for bazzite version
-    execute_script "swap-patched-bazzite-packages.sh"
-
-    # Disbale extra repos
-    execute_script "unset-extra-repos.sh"
-
-    # Configure SCX
-    sed -i "s/^SCX_SCHEDULER=.*/SCX_SCHEDULER=scx_lavd/" /etc/default/scx
-
-    # Configure Desktop Environment
+    echo "::group:: === Configure Desktop Environment ==="
     execute_script "update-system-files.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Unset Extra Repos ==="
+    execute_script "unset-extra-repos.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Enable SystemCTL Services ==="
+    systemctl enable docker.socket
+    systemctl enable podman.socket
+    systemctl enable swtpm-workaround.service
+    systemctl enable libvirt-workaround.service
+    systemctl enable bluefin-dx-groups.service
+    echo "::endgroup::"
 }
 
 main
