@@ -2,8 +2,6 @@
 
 set -ouex pipefail
 
-mkdir -p /var/usrlocal
-
 if [[ -d "$SYSTEM_FILES_DIR" ]]; then
 	cp -r "$SYSTEM_FILES_DIR"/* / || {
 		echo "Failed to copy system files"
@@ -46,8 +44,7 @@ replace_line "$SCHEMAS_FOLDER/zz0-00-bazzite-desktop-silverblue-global.gschema.o
 # Compile schemas
 glib-compile-schemas "$SCHEMAS_FOLDER"
 
-# Download dotfiles
-
+# Setup dotfiles
 git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
 
 bash /tmp/dotfiles/install.sh -c --no-backup -d /etc/skel -e nvim
