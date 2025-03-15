@@ -4,6 +4,8 @@ set -ouex pipefail
 
 mkdir -p /var/usrlocal
 
+ls -l /usr
+
 if [[ -d "$SYSTEM_FILES_DIR" ]]; then
 	cp -r "$SYSTEM_FILES_DIR"/* / || {
 		echo "Failed to copy system files"
