@@ -3,6 +3,7 @@ neovim-default-editor
 git-delta
 lazygit
 ghostty
+starship
 zsh-autosuggestions
 zsh-syntax-highlighting
 eza
