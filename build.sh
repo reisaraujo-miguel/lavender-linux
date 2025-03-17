@@ -108,7 +108,6 @@ main() {
     systemctl enable rpm-ostree-countme.service
     systemctl enable tailscaled.service
     systemctl enable dconf-update.service
-    systemctl --global enable ublue-flatpak-manager.service
     systemctl enable rpm-ostreed-automatic.timer
     systemctl enable flatpak-system-update.timer
     systemctl --global enable flatpak-user-update.timer
