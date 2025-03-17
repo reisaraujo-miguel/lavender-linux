@@ -43,7 +43,7 @@ replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.ov
 glib-compile-schemas "$SCHEMAS_FOLDER"
 
 # Setup dotfiles
-git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
+git clone https://github.com/reisaraujo-miguel/dotfiles.git /tmp/dotfiles
 bash /tmp/dotfiles/install.sh -c --no-backup -d /etc/skel -e nvim
 
 # consolidate just files
