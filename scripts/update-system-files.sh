@@ -46,5 +46,7 @@ glib-compile-schemas "$SCHEMAS_FOLDER"
 
 # Setup dotfiles
 git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
-
 bash /tmp/dotfiles/install.sh -c --no-backup -d /etc/skel -e nvim
+
+# consolidate just files
+find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
