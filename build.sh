@@ -113,7 +113,6 @@ main() {
     systemctl enable brew-upgrade.timer
     systemctl enable brew-update.timer
     systemctl --global enable podman-auto-update.timer
-    systemctl enable check-sb-key.service
     echo "::endgroup::"
 }
 
