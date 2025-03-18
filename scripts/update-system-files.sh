@@ -29,7 +29,7 @@ replace_line() {
 SCHEMAS_FOLDER=/usr/share/glib-2.0/schemas/
 
 replace_line "$SCHEMAS_FOLDER/zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
-	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'com.mitchellh.ghostty.desktop']"
+	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'org.gnome.Ptyxis.desktop']"
 
 replace_line "$SCHEMAS_FOLDER/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
 	"enabled-extensions = ['gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com', 'caffeine@patapon.info', 'tilingshell@ferrarodomenico.com']"
@@ -39,12 +39,12 @@ replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.ov
 
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
 
-replace_line "$SCHEMAS_FOLDER/zz0-00-bazzite-desktop-silverblue-global.gschema.override" "terminal=" "terminal='ghostty'"
-
 # Compile schemas
 glib-compile-schemas "$SCHEMAS_FOLDER"
 
 # Setup dotfiles
-git clone https://github.com/reisaraujo-miguel/my-dot-files.git /tmp/dotfiles
-
+git clone https://github.com/reisaraujo-miguel/dotfiles.git /tmp/dotfiles
 bash /tmp/dotfiles/install.sh -c --no-backup -d /etc/skel -e nvim
+
+# consolidate just files
+find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
