@@ -4,6 +4,8 @@ set -ouex pipefail
 
 dnf5 -y config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 
+dnf5 install --enable-repo="copr:copr.fedorainfracloud.org:ublue-os:packages"
+
 file=$(cat "${BUILD_FILES_DIR}/copr-repos")
 
 for repo in $file; do
