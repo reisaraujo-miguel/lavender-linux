@@ -37,6 +37,9 @@ replace_line "$SCHEMAS_FOLDER/zz0-03-bazzite-desktop-silverblue-extensions.gsche
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "\[org.gnome.desktop.interface\]" \
 	"\[org.gnome.desktop.interface\]\nicon-theme=\"MoreWaita\""
 
+replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "\[org.gnome.desktop.sound\]" \
+	"\[org.gnome.desktop.sound\]\nallow-volume-above-100-percent=true"
+
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
 
 # Compile schemas
