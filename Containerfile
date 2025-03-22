@@ -1,6 +1,6 @@
 ARG SOURCE_IMAGE="bazzite"
 ARG SOURCE_SUFFIX="-gnome"
-ARG SOURCE_TAG="stable"
+ARG SOURCE_TAG="latest"
 
 FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
 
