@@ -28,8 +28,6 @@ jobs:
   build-iso:
     name: Build ISOs
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
     permissions:
       contents: read
       packages: read
