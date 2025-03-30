@@ -14,10 +14,6 @@ on:
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository }}"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-  cancel-in-progress: true
-
 jobs:
   build-image:
     uses: ./.github/workflows/build-image-main.yml
