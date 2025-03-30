@@ -12,11 +12,6 @@ RELEASE="$(rpm -E %fedora)"
     exit 1
 }
 
-[[ ! -d "$BUILD_FILES_DIR" ]] && {
-    echo "Build files directory not found"
-    exit 1
-}
-
 # Helper Functions
 execute_script() {
     local script="$1"
