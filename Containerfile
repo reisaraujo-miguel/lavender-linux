@@ -1,19 +1,16 @@
-ARG SOURCE_IMAGE="bazzite"
-ARG SOURCE_SUFFIX="-gnome"
-ARG SOURCE_TAG="latest"
+# Allow build scripts to be referenced without being copied into the final image
+FROM scratch AS ctx
+COPY ./ /
 
-FROM ghcr.io/ublue-os/${SOURCE_IMAGE}${SOURCE_SUFFIX}:${SOURCE_TAG}
+FROM ghcr.io/ublue-os/bazzite-gnome:latest
 
-# copy build files
-COPY ./ /tmp/
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+	--mount=type=cache,dst=/var/cache \
+	--mount=type=cache,dst=/var/log \
+	--mount=type=tmpfs,dst=/tmp \
+	/ctx/build.sh && \
+	ostree container commit
 
-RUN mkdir -p /var/lib/alternatives \
-	&& chmod +x /tmp/build.sh \
-	&& chmod +x /tmp/scripts/* \
-	&& /tmp/build.sh \
-	&& ostree container commit
-
-## NOTES:
-# - /var/lib/alternatives is required to prevent failure with some RPM installs
-# - All RUN commands must end with ostree container commit
-#   see: https://coreos.github.io/rpm-ostree/container/#using-ostree-container-commit
+### LINTING
+## Verify final image and contents are correct.
+RUN bootc container lint
