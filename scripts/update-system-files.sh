@@ -2,8 +2,8 @@
 
 set -ouex pipefail
 
-if [[ -d "$SYSTEM_FILES_DIR" ]]; then
-	cp -r "$SYSTEM_FILES_DIR"/* / || {
+if [[ -d "/ctx/system_files" ]]; then
+	cp -r /ctx/system_files/* / || {
 		echo "Failed to copy system files"
 		exit 1
 	}

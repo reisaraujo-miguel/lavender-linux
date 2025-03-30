@@ -6,25 +6,16 @@ set -ouex pipefail
 export RELEASE
 RELEASE="$(rpm -E %fedora)"
 
-export BUILD_FILES_DIR="/tmp"
-export SCRIPTS_DIR="${BUILD_FILES_DIR}/scripts"
-export SYSTEM_FILES_DIR="${BUILD_FILES_DIR}/system_files"
-
 # Validate environment
 [[ -z "$RELEASE" ]] && {
     echo "Failed to determine Fedora release"
     exit 1
 }
 
-[[ ! -d "$BUILD_FILES_DIR" ]] && {
-    echo "Build files directory not found"
-    exit 1
-}
-
 # Helper Functions
 execute_script() {
     local script="$1"
-    local script_path="${SCRIPTS_DIR}/${script}"
+    local script_path="/ctx/scripts/${script}"
 
     if [[ ! -x "$script_path" ]]; then
         echo "Error: Script ${script} not found or not executable"
@@ -73,22 +64,22 @@ main() {
     echo "::endgroup::"
 
     echo "::group:: === Install Bluefin Base Packages ==="
-    install_packages "${BUILD_FILES_DIR}/bluefin-base-packages"
+    install_packages "/ctx/bluefin-base-packages"
     echo "::endgroup::"
 
     # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
     sysctl -p
 
     echo "::group:: === Install DX Packages ==="
-    install_packages "${BUILD_FILES_DIR}/dx-packages"
+    install_packages "/ctx/dx-packages"
     echo "::endgroup::"
 
     echo "::group:: === Install Extra Packages ==="
-    install_packages "${BUILD_FILES_DIR}/extra-packages"
+    install_packages "/ctx/extra-packages"
     echo "::endgroup::"
 
     echo "::group:: === Remove Unwanted Packages ==="
-    remove_packages "${BUILD_FILES_DIR}/remove-pkgs"
+    remove_packages "/ctx/remove-pkgs"
     echo "::endgroup::"
 
     echo "::group:: === Configure Desktop Environment ==="

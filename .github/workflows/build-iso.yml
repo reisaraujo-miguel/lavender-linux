@@ -5,18 +5,17 @@ on:
   push:
     tags:
       - "v*"
+    paths:
+      - "./iso.toml"
+      - "./.github/workflows/build-iso.yml"
+      - "./Justfile"
   workflow_dispatch:
 
 env:
-  ARCH: x86_64
-  IMAGE_NAME: felux
-  IMAGE_REPO: ghcr.io/reisaraujo-miguel
-  IMAGE_TAG: latest
-  VERSION: "41"
-  VARIANT: Kinoite
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository }}"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -31,13 +30,26 @@ jobs:
       id-token: write
 
   build-iso:
-    runs-on: ubuntu-latest
+    name: Build ISOs
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
     permissions:
-      contents: write
-      actions: read
+      contents: read
+      packages: read
+      id-token: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: lower case the image registry in case of any capitalization
+        run: |
+          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
+
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
+        with:
+          remove-codeql: true
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
@@ -46,34 +58,27 @@ jobs:
         run: |
           echo "release_ver=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
+      - name: Setup Just
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+
       - name: Build ISO
-        uses: jasonn3/build-container-installer@f09a756b7a1205f121d8508f1171759328b95d2c
+        uses: ublue-os/bootc-image-builder-action@main
         id: build
         with:
-          arch: ${{ env.ARCH }}
-          image_name: ${{ env.IMAGE_NAME }}
-          image_repo: ${{ env.IMAGE_REPO }}
-          image_tag: ${{ env.IMAGE_TAG }}
-          version: ${{ env.VERSION }}
-          variant: ${{ env.VARIANT }}
-          secure_boot_key_url: https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
-          enrollment_password: universalblue
-          enable_cache_dnf: false
-          enable_cache_skopeo: false
-          iso_name: ${{ env.IMAGE_NAME }}-${{ env.release_ver }}.iso
-          flatpak_remote_name: flathub
-          flatpak_remote_url: https://flathub.org/repo/flathub.flatpakrepo
-          flatpak_remote_refs_dir: /github/workspace/flatpak_refs/
+          bootc-image-builder-image: ghcr.io/centos-workstation/bootc-image-builder:latest
+          use-librepo: true
+          config-file: ./iso.toml
+          image: ${{ env.IMAGE_REGISTRY }}:${{ env.release_ver }}
 
-      - name: Upload ISO as artifact
-        id: upload
-        uses: actions/upload-artifact@v4
+      - name: Upload ISOs and Checksum to Job Artifacts
+        if: inputs.upload-to-s3 != true && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ steps.build.outputs.iso_name }}
-          path: |
-            ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
+          path: ${{ steps.build.outputs.output-directory }}
           if-no-files-found: error
+          retention-days: 0
           compression-level: 0
+          overwrite: true
 
       - name: Get Artifact URL
         id: get_iso_artifact
