@@ -27,6 +27,7 @@ jobs:
 
   build-iso:
     name: Build ISOs
+    needs: build-image
     runs-on: ubuntu-24.04
     permissions:
       contents: read
