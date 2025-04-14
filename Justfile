@@ -1,5 +1,5 @@
 export repo_organization := env("GITHUB_REPOSITORY_OWNER", "reisaraujo-miguel")
-export image_name := env("IMAGE_NAME", "Lavender")
+export image_name := env("IMAGE_NAME", "lavender-linux")
 export centos_version := env("CENTOS_VERSION", "stream10")
 export fedora_version := env("CENTOS_VERSION", "41")
 export default_tag := env("DEFAULT_TAG", "latest")
@@ -102,7 +102,7 @@ sudoif command *args:
 #
 
 # Build the image using the specified parameters
-build $target_image=image_name $tag=default_tag $dx="0" $hwe="0" $gdx="0":
+build $target_image=image_name $tag=default_tag $dx="1" $hwe="0" $gdx="0":
     #!/usr/bin/env bash
 
     # Get Version
@@ -189,6 +189,7 @@ _build-bib $target_image $tag $type $config: (_rootful_load_image target_image t
 
     args="--type ${type} "
     args+="--use-librepo=True"
+    args+="--rootfs=btrfs"
 
     if [[ $target_image == localhost/* ]]; then
         args+=" --local"
