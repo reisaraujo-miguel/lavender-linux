@@ -116,7 +116,7 @@ jobs:
         uses: hhd-dev/rechunk@c945e9ec8ad4466f888e41ab7f4d5ba2f74a8ee4
         with:
           rechunk: "ghcr.io/hhd-dev/rechunk:stable"
-          ref: "${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}"
+          ref: "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
           prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
           skip_compression: true
           version: ${{ env.CENTOS_VERSION }}
