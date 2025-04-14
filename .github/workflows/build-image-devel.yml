@@ -27,7 +27,7 @@ jobs:
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     permissions:
-      contents: read
+      contents: write
       packages: write
       actions: read
       id-token: write

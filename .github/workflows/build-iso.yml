@@ -20,7 +20,7 @@ jobs:
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     permissions:
-      contents: read
+      contents: write
       packages: write
       actions: read
       id-token: write
@@ -30,8 +30,8 @@ jobs:
     needs: build-image
     runs-on: ubuntu-24.04
     permissions:
-      contents: read
-      packages: read
+      contents: write
+      packages: write
       id-token: write
 
     steps:
