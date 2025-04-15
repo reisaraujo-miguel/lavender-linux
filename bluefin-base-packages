@@ -10,7 +10,6 @@ fuse-encfs
 git-credential-libsecret
 google-noto-fonts-all
 ifuse
-input-leap
 jetbrains-mono-fonts-all
 krb5-workstation
 libgda
@@ -34,4 +33,6 @@ sssd-krb5
 ublue-bling
 ublue-brew
 ublue-setup-services
+uld
+uupd
 zsh
