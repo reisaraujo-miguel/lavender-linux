@@ -34,7 +34,7 @@ install_packages() {
 
     mapfile -t packages <"$pkg_file"
 
-    if dnf5 -y install "${packages[@]}" --allowerasing; then
+    if dnf5 -y install --enablerepo=docker-ce-test "${packages[@]}" --allowerasing; then
         return 0
     fi
 
@@ -91,21 +91,7 @@ main() {
     echo "::endgroup::"
 
     echo "::group:: === Enable SystemCTL Services ==="
-    systemctl enable docker.socket
-    systemctl enable podman.socket
-    systemctl enable swtpm-workaround.service
-    systemctl enable libvirt-workaround.service
-    systemctl enable bluefin-dx-groups.service
-    systemctl enable rpm-ostree-countme.service
-    systemctl enable tailscaled.service
-    systemctl enable dconf-update.service
-    systemctl enable rpm-ostreed-automatic.timer
-    systemctl enable brew-setup.service
-    systemctl enable brew-upgrade.timer
-    systemctl enable brew-update.timer
-    systemctl --global enable podman-auto-update.timer
-    systemctl enable ublue-system-setup.service
-    systemctl --global enable ublue-user-setup.service
+    execute_script "services.sh"
     echo "::endgroup::"
 }
 
