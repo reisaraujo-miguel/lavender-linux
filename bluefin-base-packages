@@ -2,8 +2,6 @@ adcli
 bcache-tools
 borgbackup
 cryfs
-epson-inkjet-printer-escpr
-epson-inkjet-printer-escpr2
 evtest
 foo2zjs
 fuse-encfs
@@ -18,7 +16,6 @@ libsss_autofs
 oddjob-mkhomedir
 opendyslexic-fonts
 powertop
-printer-driver-brlaser
 python3-pygit2
 rclone
 restic
@@ -33,5 +30,4 @@ sssd-krb5
 ublue-bling
 ublue-brew
 ublue-setup-services
-uupd
 zsh
