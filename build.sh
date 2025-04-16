@@ -34,7 +34,7 @@ install_packages() {
 
     mapfile -t packages <"$pkg_file"
 
-    if dnf5 -y install --enablerepo=docker-ce-testing "${packages[@]}" --allowerasing; then
+    if dnf5 -y install --enablerepo=docker-ce-test "${packages[@]}" --allowerasing; then
         return 0
     fi
 
