@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-dnf5 -y config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+dnf5 -y config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce-testing.repo
 
 file=$(cat "/ctx/copr-repos")
 
