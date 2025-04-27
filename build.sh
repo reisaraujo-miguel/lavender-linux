@@ -86,6 +86,10 @@ main() {
     execute_script "update-system-files.sh"
     echo "::endgroup::"
 
+    echo "::group:: === Configure Ghostty ==="
+    execute_script "configure-ghostty.sh"
+    echo "::endgroup::"
+
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
     echo "::endgroup::"
