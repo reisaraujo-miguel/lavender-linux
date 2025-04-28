@@ -20,6 +20,7 @@ nodejs
 pavucontrol
 power-profiles-daemon 
 rofi-wayland
+sddm
 slurp
 swaybg
 swayidle
