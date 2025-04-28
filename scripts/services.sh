@@ -4,6 +4,8 @@ set -ouex pipefail
 
 systemctl enable sddm
 
+systemctl set-default graphical.target
+
 # Enable Bluefin DX services
 systemctl enable bluefin-dx-groups.service
 systemctl enable incus-workaround.service
