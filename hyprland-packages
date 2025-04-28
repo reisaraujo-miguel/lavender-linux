@@ -18,7 +18,6 @@ libgtop2
 light
 nodejs 
 pavucontrol
-polkit-gnome
 power-profiles-daemon 
 rofi-wayland
 slurp
