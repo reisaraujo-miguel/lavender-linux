@@ -63,6 +63,10 @@ main() {
     execute_script "set-extra-repos.sh"
     echo "::endgroup::"
 
+    echo "::group:: === Remove GNOME ==="
+    remove_packages "/ctx/remove-gnome-pkgs"
+    echo "::endgroup::"
+
     echo "::group:: === Install Bluefin Base Packages ==="
     install_packages "/ctx/bluefin-base-packages"
     echo "::endgroup::"
@@ -72,6 +76,10 @@ main() {
 
     echo "::group:: === Install DX Packages ==="
     install_packages "/ctx/dx-packages"
+    echo "::endgroup::"
+
+    echo "::group:: === Install Hyprland Packages ==="
+    install_packages "/ctx/hyprland-packages"
     echo "::endgroup::"
 
     echo "::group:: === Install Extra Packages ==="
@@ -84,6 +92,10 @@ main() {
 
     echo "::group:: === Configure Desktop Environment ==="
     execute_script "update-system-files.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Configure Hyprland ==="
+    execute_script "configure-hyprland.sh"
     echo "::endgroup::"
 
     echo "::group:: === Configure Ghostty ==="
