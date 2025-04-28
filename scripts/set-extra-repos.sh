@@ -26,7 +26,7 @@ for repo in $file; do
 	fi
 done
 
-dnf5 config-manager --setopt=copr:copr.fedorainfracloud.org:heus-sueh:packages.priority=200
+dnf5 config-manager setopt copr:copr.fedorainfracloud.org:heus-sueh:packages.priority=200
 
 rpmfusion_repos=$(dnf5 repo list --all | awk '/rpmfusion-/ {print $1}')
 
