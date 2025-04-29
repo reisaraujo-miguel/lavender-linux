@@ -21,8 +21,8 @@ light
 nodejs 
 pavucontrol
 power-profiles-daemon 
-qt5-wayland
-qt6-wayland
+qt5-qtwayland
+qt6-qtwayland
 rofi-wayland
 sddm
 slurp
