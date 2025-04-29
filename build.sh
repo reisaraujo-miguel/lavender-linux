@@ -55,23 +55,8 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-    echo "::group:: === Download Configs From Bluefin ==="
-    execute_script "configs-from-bluefin.sh"
-    echo "::endgroup::"
-
     echo "::group:: === Set Extra Repos ==="
     execute_script "set-extra-repos.sh"
-    echo "::endgroup::"
-
-    echo "::group:: === Install Bluefin Base Packages ==="
-    install_packages "/ctx/bluefin-base-packages"
-    echo "::endgroup::"
-
-    # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
-    sysctl -p
-
-    echo "::group:: === Install DX Packages ==="
-    install_packages "/ctx/dx-packages"
     echo "::endgroup::"
 
     echo "::group:: === Install Extra Packages ==="
@@ -82,7 +67,7 @@ main() {
     remove_packages "/ctx/remove-pkgs"
     echo "::endgroup::"
 
-    echo "::group:: === Configure Desktop Environment ==="
+    echo "::group:: === Copy System Files ==="
     execute_script "update-system-files.sh"
     echo "::endgroup::"
 

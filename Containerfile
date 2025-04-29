@@ -2,7 +2,7 @@
 FROM scratch AS ctx
 COPY ./ /
 
-FROM ghcr.io/ublue-os/bazzite:stable
+FROM ghcr.io/ublue-os/bazzite-dx:stable
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 	--mount=type=cache,dst=/var/cache \

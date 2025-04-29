@@ -2,8 +2,6 @@
 
 set -ouex pipefail
 
-dnf5 -y config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
-
 cat <<EOF >/etc/yum.repos.d/adoptium.repo
 [Adoptium]
 name=Adoptium
