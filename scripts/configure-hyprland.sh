@@ -43,6 +43,9 @@ cd $t
 git clone https://github.com/anyrun-org/anyrun.git # Clone the repository
 cd anyrun                                          # Change the active directory to it
 
+mkdir -p /root/.cargo
+chown -R root:root /root/.cargo
+
 cargo build --release        # Build all the packages
 cargo install --path anyrun/ # Install the anyrun binary
 
