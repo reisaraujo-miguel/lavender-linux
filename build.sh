@@ -63,8 +63,8 @@ main() {
     execute_script "set-extra-repos.sh"
     echo "::endgroup::"
 
-    echo "::group:: === Remove GNOME ==="
-    remove_packages "/ctx/remove-gnome-pkgs"
+    echo "::group:: === Remove Plasma ==="
+    remove_packages "/ctx/remove-plasma-pkgs"
     echo "::endgroup::"
 
     echo "::group:: === Install Bluefin Base Packages ==="
