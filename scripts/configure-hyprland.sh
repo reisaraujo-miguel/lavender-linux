@@ -24,6 +24,8 @@ cp cliphist /usr/local/bin/cliphist
 
 dnf5 install tinyxml python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml sddm sddm-breeze -y
 
+dnf5 remove tinyxml2 -y
+
 dnf5 install tinyxml2 tinyxml2-devel --releasever=41 -y
 
 #dart-sass
