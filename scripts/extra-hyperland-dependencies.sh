@@ -104,14 +104,6 @@ function remove_bashcomments_emptylines() {
 	mkdir -p "$(dirname "$2")"
 	cmd "$1" | sed -e '/^[[:blank:]]*#/d;s/#.*//' -e '/^[[:space:]]*$/d' >"$2"
 }
-function prevent_sudo_or_root() {
-	case $(whoami) in
-	root)
-		echo -e "\e[31m[$0]: This script is NOT to be executed with sudo or as root. Aborting...\e[0m"
-		exit 1
-		;;
-	esac
-}
 
 function backup_configs() {
 	local backup_dir="$BACKUP_DIR"
@@ -273,8 +265,6 @@ handle-deprecated-dependencies() {
 
 	return 0
 }
-
-prevent_sudo_or_root
 
 v install-agsv1
 v install-Rubik
