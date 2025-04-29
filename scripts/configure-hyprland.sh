@@ -13,8 +13,6 @@ chmod +x /usr/libexec/bluefin-dx-kvmfr-setup
 # install script from https://github.com/EisregenHaha/fedora-hyprland
 
 t="/tmp/"
-rm -rf "$t"
-mkdir -p "$t"
 cd "$t"
 
 dnf5 group install "Development Tools" -y
@@ -55,7 +53,7 @@ dnf5 install gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland
 # color-generation
 dnf5 install python3 python3-regex unzip python3-gobject-devel libsoup-devel blueprint-compiler python3-libsass libxdp-devel libxdp libportal -y
 
-dnf4 config-manager --add-repo https://download.opensuse.org/repositories/home:sp1rit:notekit/Fedora_Rawhide/home:sp1rit:notekit.repo -y
+dnf5 config-manager addrepo https://download.opensuse.org/repositories/home:sp1rit:notekit/Fedora_Rawhide/home:sp1rit:notekit.repo
 
 dnf5 install clatexmath-devel aylurs-gtk-shell kvantum kvantum-qt5 -y
 
