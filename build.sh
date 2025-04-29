@@ -82,10 +82,6 @@ main() {
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
     echo "::endgroup::"
-
-    echo "::group:: === Enable SystemCTL Services ==="
-    execute_script "services.sh"
-    echo "::endgroup::"
 }
 
 main
