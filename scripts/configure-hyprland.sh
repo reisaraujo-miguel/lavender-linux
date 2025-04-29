@@ -4,6 +4,8 @@ set -ouex pipefail
 
 # create directories
 mkdir -p /var/usrlocal/bin
+mkdir -p /var/roothome/.cargo/
+chown -R root:root /var/roothome/.cargo/
 
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
@@ -42,9 +44,6 @@ dnf5 install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-dev
 cd $t
 git clone https://github.com/anyrun-org/anyrun.git # Clone the repository
 cd anyrun                                          # Change the active directory to it
-
-mkdir -p /root/.cargo
-chown -R root:root /root/.cargo
 
 cargo build --release        # Build all the packages
 cargo install --path anyrun/ # Install the anyrun binary
