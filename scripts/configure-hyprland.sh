@@ -17,8 +17,8 @@ dnf5 group install development-tools -y
 dnf5 install cmake clang python3.11 python3.11-devel gammastep mate-polkit gtksourceviewmm3-devel python3-pip python3-devel gnome-bluetooth bluez-cups bluez gtk4-devel libadwaita-devel coreutils wl-clipboard xdg-utils cmake curl fuzzel rsync wget ripgrep gojq npm meson typescript gjs axel -y
 
 wget https://github.com/sentriz/cliphist/releases/download/v0.5.0/v0.5.0-linux-amd64 -O cliphist
-chmod +x cliphist
-cp cliphist /var/usrlocal/bin/cliphist
+chmod +x ./cliphist
+cp ./cliphist /var/usrlocal/bin/
 
 dnf5 install tinyxml python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml sddm sddm-breeze -y
 
