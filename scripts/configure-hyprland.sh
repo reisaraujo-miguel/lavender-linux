@@ -11,8 +11,8 @@ chmod +x /usr/libexec/bluefin-incus
 chmod +x /usr/libexec/bluefin-dx-kvmfr-setup
 
 # remove kde plasma
-dnf5 remove @kde-desktop
-dnf5 autoremove
+dnf5 remove @kde-desktop -y
+dnf5 autoremove -y
 
 # install script from https://github.com/EisregenHaha/fedora-hyprland
 
