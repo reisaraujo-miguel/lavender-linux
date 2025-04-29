@@ -76,6 +76,8 @@ cp -R ./* /etc/skel/.local/share/fonts
 cd $t
 dnf5 install greetd -y
 
+useradd -M -G video greeter
+chmod -R go+r /etc/greetd/
 systemctl enable --now greetd.service
 
 git clone https://github.com/rharish101/ReGreet.git
