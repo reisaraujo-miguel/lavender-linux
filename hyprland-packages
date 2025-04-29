@@ -1,5 +1,6 @@
 NetworkManager 
 aylurs-gtk-shell 
+blueman
 bluez 
 bluez-tools 
 brightnessctl 
@@ -20,11 +21,13 @@ libgtop2
 light
 nodejs 
 pavucontrol
+pm-utils
 power-profiles-daemon 
 qt5-qtwayland
 qt6-qtwayland
 rofi-wayland
 sddm
+sddm-breeze
 slurp
 swaybg
 swayidle
