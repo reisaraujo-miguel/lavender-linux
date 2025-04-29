@@ -78,10 +78,6 @@ main() {
     install_packages "/ctx/dx-packages"
     echo "::endgroup::"
 
-    echo "::group:: === Install Hyprland Packages ==="
-    install_packages "/ctx/hyprland-packages"
-    echo "::endgroup::"
-
     echo "::group:: === Install Extra Packages ==="
     install_packages "/ctx/extra-packages"
     echo "::endgroup::"
