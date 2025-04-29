@@ -81,7 +81,7 @@ useradd -M greeter
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
 
-systemctl enable --now greetd.service
+systemctl enable greetd.service
 
 git clone https://github.com/rharish101/ReGreet.git
 cd ReGreet
