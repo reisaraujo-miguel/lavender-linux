@@ -12,9 +12,9 @@ XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 BACKUP_DIR=${BACKUP_DIR:-/tmp/backup}
 
-cd "$(dirname "$0")"
+cd /tmp
 export base
-base="$(pwd)"
+base="/tmp"
 
 ask=false
 
