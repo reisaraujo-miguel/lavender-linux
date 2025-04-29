@@ -76,7 +76,17 @@ cp -R ./* /etc/skel/.local/share/fonts
 cd $t
 dnf5 install greetd -y
 
-useradd -M -G video greeter
+# Create video group if it doesn't exist
+getent group video >/dev/null || groupadd video
+
+# Create input group if it doesn't exist
+getent group input >/dev/null || groupadd input
+
+# Create render group if it doesn't exist
+getent group render >/dev/null || groupadd render
+
+useradd -M -G video,input,render greeter
+
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
 systemctl enable --now greetd.service
