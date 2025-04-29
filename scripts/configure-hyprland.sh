@@ -74,7 +74,7 @@ cp -R ./* /etc/skel/.local/share/fonts
 
 # Install ReGreet
 
-dnf5 install greetd
+dnf5 install greetd -y
 
 git clone https://github.com/rharish101/ReGreet.git
 cd ReGreet
