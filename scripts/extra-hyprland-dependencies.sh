@@ -118,22 +118,6 @@ function backup_configs() {
 }
 
 # Not for Arch(based) distro.
-install-agsv1() {
-	x mkdir -p "$base/cache/agsv1"
-	x cd "$base/cache/agsv1"
-	try git init -b main
-	try git remote add origin https://github.com/Aylur/ags.git
-	x git pull origin main && git submodule update --init --recursive
-	x git fetch --tags
-	x git checkout v1.9.0
-	x npm install
-	x meson setup build # --reconfigure
-	x meson install -C build
-	x mv /usr/bin/ags{,v1}
-	x cd "$base"
-}
-
-# Not for Arch(based) distro.
 install-Rubik() {
 	x mkdir -p "$base/cache/Rubik"
 	x cd "$base/cache/Rubik"
@@ -250,25 +234,6 @@ install-python-packages() {
 	done
 }
 
-# Only for Arch(based) distro.
-handle-deprecated-dependencies() {
-	printf "\e[36m[%s]: Removing deprecated dependencies:\e[0m\n", "$0"
-	for i in illogical-impulse-{microtex,pymyc-aur,ags} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git; do try sudo pacman --noconfirm -Rdd "$i"; done
-	# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-	readarray -t old_deps_list <./cache/old_deps_stripped.conf
-	pacman -Qeq >./cache/pacman_explicit_packages
-	readarray -t explicitly_installed <./cache/pacman_explicit_packages
-
-	echo "Attempting to set previously explicitly installed deps as implicit..."
-	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && yay -D --asdeps "$i"
-	done; done
-
-	return 0
-}
-
-v install-agsv1
 v install-Rubik
 v install-Gabarito
 v install-OneUI
