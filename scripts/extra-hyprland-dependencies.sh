@@ -176,7 +176,7 @@ install-python-packages() {
 	# we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
 	x uv venv --prompt .venv "$ILLOGICAL_IMPULSE_VIRTUAL_ENV" -p 3.11
 	x source "$ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/activate"
-	x uv pip install -r scriptdata/requirements.txt
+	x uv pip install -r /ctx/requirements.txt
 
 	x mkdir -p "$base/cache/blueprint-compiler" && cd "$base/cache/blueprint-compiler"
 	try git init -b main
