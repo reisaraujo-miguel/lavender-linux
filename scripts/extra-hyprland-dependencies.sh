@@ -164,20 +164,6 @@ install-OneUI() {
 }
 
 # Not for Arch(based) distro.
-install-bibata() {
-	x mkdir -p "$base/cache/bibata-cursor"
-	x cd "$base/cache/bibata-cursor"
-	name="Bibata-Modern-Classic"
-	file="$name.tar.xz"
-	# Use axel because `curl -O` always downloads a file with 0 byte size, idk why
-	x axel https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/$file
-	tar -xf $file
-	x mkdir -p /usr/share/icons
-	x cp -r $name /usr/share/icons
-	x cd "$base"
-}
-
-# Not for Arch(based) distro.
 install-uv() {
 	x bash <(curl -LJs "https://astral.sh/uv/install.sh")
 }
@@ -220,8 +206,6 @@ install-python-packages() {
 v install-Rubik
 v install-Gabarito
 v install-OneUI
-v install-bibata
-v install-MicroTeX
 v install-uv
 v install-python-packages
 
