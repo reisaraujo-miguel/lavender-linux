@@ -76,11 +76,7 @@ cp -R ./* /etc/skel/.local/share/fonts
 cd $t
 dnf5 install greetd -y
 
-groupadd video -f
-groupadd input -f
-groupadd render -f
-
-useradd -M -G video,input,render greeter
+useradd -M greeter
 
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
