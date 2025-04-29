@@ -16,6 +16,8 @@ cd "$(dirname "$0")"
 export base
 base="$(pwd)"
 
+ask=false
+
 function try { "$@" || sleep 0; }
 function v() {
 	echo -e "####################################################"
