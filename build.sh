@@ -63,10 +63,6 @@ main() {
     execute_script "set-extra-repos.sh"
     echo "::endgroup::"
 
-    echo "::group:: === Remove Plasma ==="
-    remove_packages "/ctx/remove-plasma-pkgs"
-    echo "::endgroup::"
-
     echo "::group:: === Install Bluefin Base Packages ==="
     install_packages "/ctx/bluefin-base-packages"
     echo "::endgroup::"
