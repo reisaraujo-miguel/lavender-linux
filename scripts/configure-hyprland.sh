@@ -15,7 +15,7 @@ chmod +x /usr/libexec/bluefin-dx-kvmfr-setup
 t="/tmp/"
 cd "$t"
 
-dnf5 group install "Development Tools" -y
+dnf5 group install development-tools -y
 dnf5 install cmake clang python3.11 python3.11-devel gammastep mate-polkit gtksourceviewmm3-devel python3-pip python3-devel gnome-bluetooth bluez-cups bluez gtk4-devel libadwaita-devel coreutils wl-clipboard xdg-utils cmake curl fuzzel rsync wget ripgrep gojq npm meson typescript gjs axel -y
 
 wget https://github.com/sentriz/cliphist/releases/download/v0.5.0/v0.5.0-linux-amd64 -O cliphist
