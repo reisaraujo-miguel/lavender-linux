@@ -170,7 +170,7 @@ install-uv() {
 
 # Both for Arch(based) and other distros.
 install-python-packages() {
-	UV_NO_MODIFY_PATH=1
+	export UV_NO_MODIFY_PATH=1
 	ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/ags/.venv
 	x mkdir -p "$ILLOGICAL_IMPULSE_VIRTUAL_ENV"
 	# we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089

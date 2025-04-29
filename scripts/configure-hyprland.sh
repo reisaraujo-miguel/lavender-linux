@@ -7,8 +7,8 @@ HOME=/tmp
 
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
-# remove kde plasma
-dnf5 remove dolphin kate kwrite ark spectacle -y
+dnf5 remove -y gnome-shell gnome-session gnome-session-xsession gnome-classic-session gnome-session-wayland-session
+
 dnf5 autoremove -y
 
 # install script from https://github.com/EisregenHaha/fedora-hyprland
@@ -23,7 +23,7 @@ wget https://github.com/sentriz/cliphist/releases/download/v0.5.0/v0.5.0-linux-a
 chmod +x cliphist
 cp cliphist /usr/bin/cliphist
 
-dnf5 install tinyxml python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml sddm sddm-breeze -y
+dnf5 install tinyxml python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml -y
 
 dnf5 remove tinyxml2 -y
 
@@ -39,6 +39,7 @@ cp -rf ./* /usr/bin/
 
 dnf5 install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-devel libwebp-devel file-devel libdrm-devel libgbm-devel pam-devel libsass-devel libsass cargo -y
 
+# Install AnyRun
 cd $t
 git clone https://github.com/anyrun-org/anyrun.git # Clone the repository
 cd anyrun                                          # Change the active directory to it
@@ -70,6 +71,20 @@ else
 fi
 
 cp -R ./* /etc/skel/.local/share/fonts
+
+# Install ReGreet
+
+dnf5 install greetd
+
+git clone https://github.com/rharish101/ReGreet.git
+cd ReGreet
+
+cargo build --all-features --release
+cp target/release/regreet /usr/bin
+
+wget https://github.com/rharish101/ReGreet/blob/main/systemd-tmpfiles.conf -O /etc/tmpfiles.d/regreet.conf
+
+systemd-tmpfiles --create "$PWD/systemd-tmpfiles.conf"
 
 cd /
 

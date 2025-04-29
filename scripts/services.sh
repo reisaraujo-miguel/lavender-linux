@@ -2,4 +2,4 @@
 
 set -ouex pipefail
 
-systemctl enable sddm.service --force
+systemctl enable greetd --force
