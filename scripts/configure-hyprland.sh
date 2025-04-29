@@ -43,11 +43,7 @@ cd $t
 git clone https://github.com/anyrun-org/anyrun.git # Clone the repository
 cd anyrun                                          # Change the active directory to it
 
-# Remove the file if it exists
-if [[ -e /root/.cargo ]]; then
-	rm /root/.cargo
-	mkdir /root/.cargo
-fi
+rm /root/.cargo
 
 cargo build --release        # Build all the packages
 cargo install --path anyrun/ # Install the anyrun binary
