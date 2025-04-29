@@ -90,12 +90,12 @@ main() {
     remove_packages "/ctx/remove-pkgs"
     echo "::endgroup::"
 
-    echo "::group:: === Configure Desktop Environment ==="
-    execute_script "update-system-files.sh"
-    echo "::endgroup::"
-
     echo "::group:: === Configure Hyprland ==="
     execute_script "configure-hyprland.sh"
+    echo "::endgroup::"
+
+    echo "::group:: === Configure Desktop Environment ==="
+    execute_script "update-system-files.sh"
     echo "::endgroup::"
 
     echo "::group:: === Unset Extra Repos ==="
