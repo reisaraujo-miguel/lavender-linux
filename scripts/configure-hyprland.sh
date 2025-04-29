@@ -77,6 +77,7 @@ cd $t
 dnf5 install greetd -y
 
 useradd -M -G video greeter
+mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
 systemctl enable --now greetd.service
 
