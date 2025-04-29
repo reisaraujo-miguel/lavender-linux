@@ -178,23 +178,6 @@ install-bibata() {
 }
 
 # Not for Arch(based) distro.
-install-MicroTeX() {
-	x mkdir -p "$base/cache/MicroTeX"
-	x cd "$base/cache/MicroTeX"
-	try git init -b master
-	try git remote add origin https://github.com/NanoMichael/MicroTeX.git
-	x git pull origin master && git submodule update --init --recursive
-	x mkdir -p build
-	x cd build
-	x cmake ..
-	x make -j32
-	x mkdir -p /opt/MicroTeX
-	x cp ./LaTeX /opt/MicroTeX/
-	x cp -r ./res /opt/MicroTeX/
-	x cd "$base"
-}
-
-# Not for Arch(based) distro.
 install-uv() {
 	x bash <(curl -LJs "https://astral.sh/uv/install.sh")
 }
