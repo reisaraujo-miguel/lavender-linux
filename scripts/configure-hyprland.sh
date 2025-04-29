@@ -17,16 +17,16 @@ rm -rf "$t"
 mkdir -p "$t"
 cd "$t"
 
-dnf4 group install "Development Tools" -y
-dnf install cmake clang python3.11 python3.11-devel gammastep mate-polkit gtksourceviewmm3-devel python3-pip python3-devel gnome-bluetooth bluez-cups bluez gtk4-devel libadwaita-devel coreutils wl-clipboard xdg-utils cmake curl fuzzel rsync wget ripgrep gojq npm meson typescript gjs axel -y
+dnf5 group install "Development Tools" -y
+dnf5 install cmake clang python3.11 python3.11-devel gammastep mate-polkit gtksourceviewmm3-devel python3-pip python3-devel gnome-bluetooth bluez-cups bluez gtk4-devel libadwaita-devel coreutils wl-clipboard xdg-utils cmake curl fuzzel rsync wget ripgrep gojq npm meson typescript gjs axel -y
 
 wget https://github.com/sentriz/cliphist/releases/download/v0.5.0/v0.5.0-linux-amd64 -O cliphist
 chmod +x cliphist
 cp cliphist /usr/local/bin/cliphist
 
-dnf install tinyxml tinyxml2 tinyxml2-devel --releasever=41 -y
+dnf5 install tinyxml tinyxml2 tinyxml2-devel --releasever=41 -y
 
-dnf install python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep -hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml sddm sddm-breeze -y
+dnf5 install python3-build python3-pillow python3-setuptools_scm python3-wheel hyprland hyprland-qtutils xrandr xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland pavucontrol wireplumber libdbusmenu-gtk3-devel libdbusmenu playerctl swww yad scdoc ydotool webp-pixbuf-loader gtk-layer-shell-devel gtk3 gtksourceview3 gtksourceview3-devel gobject-introspection upower brightnessctl ddcutil gammastep -hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout pugixml sddm sddm-breeze -y
 
 #dart-sass
 
@@ -36,7 +36,7 @@ tar -xzf dart-sass-1.77.0-linux-x64.tar.gz
 cd dart-sass
 cp -rf ./* /usr/local/bin/
 
-dnf install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-devel libwebp-devel file-devel libdrm-devel libgbm-devel pam-devel libsass-devel libsass cargo -y
+dnf5 install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-devel libwebp-devel file-devel libdrm-devel libgbm-devel pam-devel libsass-devel libsass cargo -y
 
 cd $t
 git clone https://github.com/anyrun-org/anyrun.git # Clone the repository
@@ -50,14 +50,14 @@ mkdir -p /etc/skel/.config/anyrun/plugins                  # Create the config d
 cp target/release/*.so /etc/skel/.config/anyrun/plugins    # Copy all of the built plugins to the correct directory
 cp examples/config.ron /etc/skel/.config/anyrun/config.ron # Copy the default config file
 
-dnf install gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland fontconfig jetbrains-mono-fonts gdouros-symbola-fonts lato-fonts starship swappy wf-recorder grim tesseract slurp appstream-util python3.12 python3.12-devel libsoup3-devel uv gobject-introspection-devel gjs-devel pulseaudio-libs-devel -y
+dnf5 install gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland fontconfig jetbrains-mono-fonts gdouros-symbola-fonts lato-fonts starship swappy wf-recorder grim tesseract slurp appstream-util python3.12 python3.12-devel libsoup3-devel uv gobject-introspection-devel gjs-devel pulseaudio-libs-devel -y
 
 # color-generation
-dnf install python3 python3-regex unzip python3-gobject-devel libsoup-devel blueprint-compiler python3-libsass libxdp-devel libxdp libportal -y
+dnf5 install python3 python3-regex unzip python3-gobject-devel libsoup-devel blueprint-compiler python3-libsass libxdp-devel libxdp libportal -y
 
 dnf4 config-manager --add-repo https://download.opensuse.org/repositories/home:sp1rit:notekit/Fedora_Rawhide/home:sp1rit:notekit.repo -y
 
-dnf install clatexmath-devel aylurs-gtk-shell kvantum kvantum-qt5 -y
+dnf5 install clatexmath-devel aylurs-gtk-shell kvantum kvantum-qt5 -y
 
 git clone https://github.com/EisregenHaha/end4fonts
 cd end4fonts/fonts
