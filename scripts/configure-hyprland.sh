@@ -51,7 +51,7 @@ dnf5 install gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland
 # color-generation
 dnf5 install python3 python3-regex unzip python3-gobject-devel libsoup-devel blueprint-compiler python3-libsass libxdp-devel libxdp libportal -y
 
-dnf5 config-manager addrepo https://download.opensuse.org/repositories/home:sp1rit:notekit/Fedora_Rawhide/home:sp1rit:notekit.repo
+dnf5 config-manager addrepo --from-repofile=https://download.opensuse.org/repositories/home:sp1rit:notekit/Fedora_Rawhide/home:sp1rit:notekit.repo
 
 dnf5 install clatexmath-devel aylurs-gtk-shell kvantum kvantum-qt5 -y
 
