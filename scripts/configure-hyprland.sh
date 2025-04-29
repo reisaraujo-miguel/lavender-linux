@@ -7,7 +7,7 @@ HOME=/tmp
 
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
-dnf5 remove -y gnome-shell gnome-session gnome-session-xsession gnome-classic-session gnome-session-wayland-session
+dnf5 remove -y gnome-shell gnome-session gnome-session-xsession gnome-classic-session gnome-session-wayland-session mutter
 
 dnf5 autoremove -y
 
