@@ -98,10 +98,6 @@ main() {
     execute_script "configure-hyprland.sh"
     echo "::endgroup::"
 
-    echo "::group:: === Configure Ghostty ==="
-    execute_script "configure-ghostty.sh"
-    echo "::endgroup::"
-
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
     echo "::endgroup::"
