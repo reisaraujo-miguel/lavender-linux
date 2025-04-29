@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # create directories
-mkdir -p /var/usrlocal/
+mkdir -p /var/usrlocal/bin
 
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
