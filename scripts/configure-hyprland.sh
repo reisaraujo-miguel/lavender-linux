@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # set home
-HOME=/ctx/
+HOME=/ctx
 
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
@@ -13,7 +13,7 @@ dnf5 autoremove -y
 
 # install script from https://github.com/EisregenHaha/fedora-hyprland
 
-t="/ctx/"
+t="/ctx"
 cd "$t"
 
 dnf5 group install development-tools -y
