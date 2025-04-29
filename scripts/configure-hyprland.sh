@@ -5,8 +5,7 @@ set -ouex pipefail
 chmod +x /usr/share/xdg/autostart/hyprland-portal.desktop
 
 # remove kde plasma
-dnf5 group install kde-desktop -y
-dnf5 group remove kde-desktop -y
+dnf5 remove plasma-desktop plasma-workspace dolphin kate kwrite ark spectacle -y
 dnf5 autoremove -y
 
 # install script from https://github.com/EisregenHaha/fedora-hyprland
