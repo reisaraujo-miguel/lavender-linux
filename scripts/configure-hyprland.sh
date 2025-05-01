@@ -76,7 +76,7 @@ cp -R ./* /etc/skel/.local/share/fonts
 cd $t
 dnf5 install greetd -y
 
-useradd -M greeter
+systemd-sysusers
 
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
@@ -89,9 +89,9 @@ cd ReGreet
 cargo build --all-features --release
 cp target/release/regreet /usr/bin
 
-wget https://github.com/rharish101/ReGreet/blob/main/systemd-tmpfiles.conf -O /etc/tmpfiles.d/regreet.conf
+wget https://github.com/rharish101/ReGreet/blob/main/systemd-tmpfiles.conf -O /usr/lib/tmpfiles.d/regreet.conf
 
-systemd-tmpfiles --create "$PWD/systemd-tmpfiles.conf"
+systemd-tmpfiles --create
 
 cd /
 
