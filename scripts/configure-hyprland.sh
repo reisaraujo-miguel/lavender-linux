@@ -77,6 +77,7 @@ cd $t
 dnf5 install greetd -y
 
 systemd-sysusers
+systemd-tmpfiles --create
 
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
