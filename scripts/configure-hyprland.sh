@@ -37,7 +37,7 @@ tar -xzf dart-sass-1.77.0-linux-x64.tar.gz
 cd dart-sass
 cp -rf ./* /usr/bin/
 
-dnf5 install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-devel libwebp-devel file-devel libdrm-devel libgbm-devel pam-devel libsass-devel libsass cargo -y --disableexcludes=all
+dnf5 install python3-pywayland python3-psutil hypridle wl-clipboard hyprlang-devel libwebp-devel file-devel libdrm-devel libgbm-devel pam-devel libsass-devel libsass cargo -y --setopt=disable_excludes=*
 
 # Install AnyRun
 cd $t
