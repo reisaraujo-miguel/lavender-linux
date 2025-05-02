@@ -34,7 +34,7 @@ install_packages() {
 
     mapfile -t packages <"$pkg_file"
 
-    if dnf5 -y install --enablerepo=docker-ce-test "${packages[@]}" --allowerasing; then
+    if dnf5 -y install "${packages[@]}" --allowerasing; then
         return 0
     fi
 
@@ -55,23 +55,8 @@ remove_packages() {
 
 # Main Installation Steps
 main() {
-    echo "::group:: === Download Configs From Bluefin ==="
-    execute_script "configs-from-bluefin.sh"
-    echo "::endgroup::"
-
     echo "::group:: === Set Extra Repos ==="
     execute_script "set-extra-repos.sh"
-    echo "::endgroup::"
-
-    echo "::group:: === Install Bluefin Base Packages ==="
-    install_packages "/ctx/bluefin-base-packages"
-    echo "::endgroup::"
-
-    # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
-    sysctl -p
-
-    echo "::group:: === Install DX Packages ==="
-    install_packages "/ctx/dx-packages"
     echo "::endgroup::"
 
     echo "::group:: === Install Extra Packages ==="
@@ -92,10 +77,6 @@ main() {
 
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
-    echo "::endgroup::"
-
-    echo "::group:: === Enable SystemCTL Services ==="
-    execute_script "services.sh"
     echo "::endgroup::"
 }
 
