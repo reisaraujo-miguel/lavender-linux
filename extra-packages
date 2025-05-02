@@ -1,2 +1,5 @@
 ghostty
+ghostty-zsh-completion
+ghostty-shell-integration
+ghostty-bash-completion
 temurin-17-jdk
