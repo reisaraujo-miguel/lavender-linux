@@ -76,7 +76,7 @@ cp -R ./* /etc/skel/.local/share/fonts
 cd $t
 dnf5 install greetd -y
 
-systemd-sysusers
+systemd-sysusers /usr/lib/sysusers.d/greetd-user.conf
 
 mkdir -p /etc/greetd/
 chmod -R go+r /etc/greetd/
