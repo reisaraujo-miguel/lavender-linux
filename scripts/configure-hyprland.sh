@@ -86,7 +86,9 @@ cd ReGreet
 cargo build --all-features --release
 cp target/release/regreet /usr/bin
 
-wget https://github.com/rharish101/ReGreet/blob/main/systemd-tmpfiles.conf -O /usr/lib/tmpfiles.d/regreet.conf
+sed -i 's/greeter/greetd/g' ./systemd-tmpfiles.conf
+
+cp ./systemd-tmpfiles.conf /etc/tmpfiles.d/regreet.conf
 
 systemd-tmpfiles --create "$PWD/systemd-tmpfiles.conf"
 
