@@ -1,4 +1,6 @@
-starship
 ghostty
+ghostty-bash-completion
+ghostty-shell-integration
+ghostty-zsh-completion
 morewaita-icon-theme
 temurin-17-jdk
