@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+dnf5 config-manager --set-enabled terra
+
 cat <<EOF >/etc/yum.repos.d/adoptium.repo
 [Adoptium]
 name=Adoptium
