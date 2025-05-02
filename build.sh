@@ -76,7 +76,7 @@ main() {
     echo "::endgroup::"
 
     echo "::group:: === Install Hyprland Extra Dependencies==="
-    #execute_script "extra-hyprland-dependencies.sh"
+    execute_script "extra-hyprland-dependencies.sh"
     echo "::endgroup::"
 
     echo "::group:: === Unset Extra Repos ==="
