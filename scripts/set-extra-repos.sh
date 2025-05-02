@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-dnf5 config-manager --set-enabled terra
+dnf5 config-manager setopt "terra-release.enabled=True"
 
 cat <<EOF >/etc/yum.repos.d/adoptium.repo
 [Adoptium]
