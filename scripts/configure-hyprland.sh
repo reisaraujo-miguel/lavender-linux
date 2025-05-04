@@ -4,7 +4,7 @@ set -ouex pipefail
 
 # Install Hyprland
 
-dnf5 install fuzzel hyprland hyprland-qtutils xdg-desktop-portal-hyprland playerctl swww scdoc brightnessctl hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout hypridle hyprlang-devel libsass-devel libsass gnome-themes-extra qt5ct qt6-qtwayland blueprint-compiler python3-libsass aylurs-gtk-shell kvantum kvantum-qt5 cargo cairo-devel pango-devel -y
+dnf5 install -y fuzzel hyprland hyprland-qtutils xdg-desktop-portal-hyprland playerctl swww scdoc brightnessctl hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout hypridle hyprlang-devel libsass-devel libsass gnome-themes-extra qt5ct qt6-qtwayland blueprint-compiler python3-libsass aylurs-gtk-shell kvantum kvantum-qt5
 
 # Install ReGreet
 dnf5 install greetd -y
@@ -14,6 +14,9 @@ chmod -R go+r /etc/greetd/
 systemctl enable greetd.service -f
 
 cd /tmp
+
+# install build dependencies
+dnf5 install -y cargo cairo-devel pango-devel gdk-pixbuf2-devel
 
 git clone https://github.com/rharish101/ReGreet.git
 cd ReGreet
