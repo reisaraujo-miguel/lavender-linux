@@ -16,7 +16,7 @@ systemctl enable greetd.service -f
 cd /tmp
 
 # install build dependencies
-dnf5 install -y cargo cairo-devel pango-devel gdk-pixbuf2-devel cairo-gobject-devel
+dnf5 install -y cargo cairo-devel pango-devel gdk-pixbuf2-devel cairo-gobject-devel graphene-devel
 
 git clone https://github.com/rharish101/ReGreet.git
 cd ReGreet
