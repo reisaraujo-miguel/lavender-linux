@@ -4,7 +4,7 @@ set -ouex pipefail
 
 # Install Hyprland
 
-dnf5 install fuzzel hyprland hyprland-qtutils xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland playerctl swww yad scdoc ydotool upower brightnessctl hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout hypridle hyprlang-devel libsass-devel libsass gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland blueprint-compiler python3-libsass aylurs-gtk-shell kvantum kvantum-qt5 cargo -y
+dnf5 install fuzzel hyprland hyprland-qtutils xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland playerctl swww yad scdoc ydotool upower brightnessctl hyprpicker hyprutils hyprwayland-scanner hyprlock wlogout hypridle hyprlang-devel libsass-devel libsass gnome-themes-extra adw-gtk3-theme qt5ct qt6-qtwayland qt5-qtwayland blueprint-compiler python3-libsass aylurs-gtk-shell kvantum kvantum-qt5 cargo cairo-devel -y
 
 # Install ReGreet
 dnf5 install greetd -y
