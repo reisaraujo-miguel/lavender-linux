@@ -13,6 +13,7 @@ dnf5 install fuzzel hyprland hyprland-qtutils xdg-desktop-portal xdg-desktop-por
 
 # Install ReGreet
 dnf5 install greetd -y
+dnf5 remove gdm
 
 chmod -R go+r /etc/greetd/
 
