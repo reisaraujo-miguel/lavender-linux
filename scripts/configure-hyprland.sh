@@ -18,6 +18,8 @@ cd /tmp
 git clone https://github.com/rharish101/ReGreet.git
 cd ReGreet
 
+HOME=/tmp
+
 cargo build --all-features --release
 cp target/release/regreet /usr/bin
 
