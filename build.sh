@@ -47,6 +47,7 @@ remove_packages() {
     mapfile -t packages <"$pkg_file"
 
     if dnf5 -y remove "${packages[@]}"; then
+        dnf5 -y autoremove
         return 0
     fi
 
