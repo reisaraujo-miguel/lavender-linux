@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
 
@@ -160,28 +160,26 @@ jobs:
       # This does not make your image faster to download, just provides better resumability and fixes a few errors.
       # Documentation for Rechunk is provided on their github repository at https://github.com/hhd-dev/rechunk
       # You can enable it by uncommenting the following lines:
-      #- name: Run Rechunker
-      #  id: rechunk
-      #  uses: hhd-dev/rechunk@f153348d8100c1f504dec435460a0d7baf11a9d2 # v1.1.1
-      #  with:
-      #    rechunk: "ghcr.io/hhd-dev/rechunk:v1.0.1"
-      #    ref: "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-      #    prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-      #    skip_compression: true
-      #    version: ${{ env.CENTOS_VERSION }}
-      #    labels: ${{ steps.metadata.outputs.labels }} # Rechunk strips out all the labels during build, this needs to be reapplied here with newline separator
-
-      # This is necessary so that the podman socket can find the rechunked image on its storage
-      #- name: Load in podman and tag
-      #  run: |
-      #    IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
-      #    sudo rm -rf ${{ steps.rechunk.outputs.output }}
-      #    for tag in ${{ steps.metadata.outputs.tags }}; do
-      #            podman tag $IMAGE ${{ env.IMAGE_NAME }}:$tag
-      #          done
-
-      # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
-      # They also check if the runner is on the default branch so that things like the merge queue (if you enable it), are going to work
+      # - name: Run Rechunker
+      #   id: rechunk
+      #   uses: hhd-dev/rechunk@c945e9ec8ad4466f888e41ab7f4d5ba2f74a8ee4
+      #   with:
+      #     rechunk: "ghcr.io/hhd-dev/rechunk:stable"
+      #     ref: "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+      #     prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+      #     skip_compression: true
+      #     version: ${{ env.CENTOS_VERSION }}
+      #     labels: ${{ steps.metadata.outputs.labels }} # Rechunk strips out all the labels during build, this needs to be reapplied here with newline separator
+      #
+      # # This is necessary so that the podman socket can find the rechunked image on its storage
+      # - name: Load in podman and tag
+      #   run: |
+      #     IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
+      #     sudo rm -rf ${{ steps.rechunk.outputs.output }}
+      #     for tag in ${{ steps.metadata.outputs.tags }}; do
+      #             podman tag $IMAGE ${{ env.IMAGE_NAME }}:$tag
+      #           done
+      #
       - name: Login to GitHub Container Registry
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
         if: github.event_name != 'pull_request'
@@ -205,7 +203,7 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
 
       # Sign container image with Cosign
-      - uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a
+      - uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
