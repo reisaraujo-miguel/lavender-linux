@@ -33,7 +33,6 @@ on:
         required: false
         type: string
         description: Git reference to checkout
-        default: ${{ github.ref }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
