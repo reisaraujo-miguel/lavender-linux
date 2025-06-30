@@ -33,7 +33,6 @@ on:
         required: false
         type: string
         description: Git reference to checkout
-        default: ${{ github.ref }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
@@ -63,19 +62,19 @@ jobs:
 
     steps:
       - name: Checkout Push to Registry action
-        if: ${{ inputs.image-variant }} == 'Devel'
+        if: inputs.image-variant == 'Devel'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.ref }}
 
       - name: Checkout Repository
-        if: ${{ inputs.image-variant }} == 'Main'
+        if: inputs.image-variant == 'Main'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
       - name: Fetch Latest Release Tag
-        if: ${{ inputs.image-variant }} == 'Main'
+        if: inputs.image-variant == 'Main'
         run: |
           latest_tag=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest tag is $latest_tag"
@@ -83,7 +82,7 @@ jobs:
           echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
 
       - name: Checkout Push to Registry action
-        if: ${{ inputs.image-variant }} == 'Main'
+        if: inputs.image-variant == 'Main'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ env.latest_tag }}
@@ -150,7 +149,7 @@ jobs:
         with:
           containerfiles: |
             ./Containerfile
-          image: ${{ inputs.image-name }}
+          image: ${{ env.IMAGE_NAME }}
           tags: |
             ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
@@ -196,7 +195,7 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          registry: ${{ steps.registry_case.outputs.lowercase }}
+          registry: ${{ env.IMAGE_REGISTRY }}
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.metadata.outputs.tags }}
           username: ${{ env.REGISTRY_USER }}
@@ -209,7 +208,7 @@ jobs:
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |
-          IMAGE_FULL="${{ steps.registry_case.outputs.lowercase }}/${IMAGE_NAME}"
+          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           for tag in ${{ steps.metadata.outputs.tags }}; do
             cosign sign -y --key env://COSIGN_PRIVATE_KEY $IMAGE_FULL:$tag
           done
