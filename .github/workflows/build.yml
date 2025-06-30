@@ -4,26 +4,44 @@ name: Build Container Image
 on:
   workflow_call:
     inputs:
-      image-name:
+      image-variant:
         required: true
         type: string
-        description: Name of the container image
-      image-description:
+    secrets:
+      SIGNING_SECRET:
+        required: false
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "05 10 * * *" # 10:05am UTC everyday
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**/README.md"
+  workflow_dispatch:
+    inputs:
+      image-variant:
+        description: Image Variant
         required: true
-        type: string
-        description: Description of the container image
+        type: choice
+        options:
+          - Devel
+          - Main
       ref:
         required: false
         type: string
         description: Git reference to checkout
         default: ${{ github.ref }}
-    secrets:
-      SIGNING_SECRET:
-        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
+  cancel-in-progress: true
 
 env:
-  IMAGE_NAME: "${{ inputs.image-name }}" # the name of the image produced by this build, matches repo names
-  IMAGE_DESC: "${{ inputs.image-description}}"
+  IMAGE_NAME: "${{ github.event.repository.name }}-devel" # the name of the image produced by this build, defaults to devel
+  IMAGE_DESC: "Linux distro for gaming and coding based on Bazzite DX"
   IMAGE_KEYWORDS: "bootc,ublue,universal-blue,bazzite"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}" # do not edit
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4" # You should put your own image here so that you get a fancy profile image on https://artifacthub.io/!
@@ -44,21 +62,43 @@ jobs:
       digest: ${{ steps.push.outputs.digest }}
 
     steps:
+      - name: Checkout Push to Registry action
+        if: ${{ inputs.image-variant }} == 'Devel'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Checkout Repository
+        if: ${{ inputs.image-variant }} == 'Main'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Latest Release Tag
+        if: ${{ inputs.image-variant }} == 'Main'
+        run: |
+          latest_tag=$(git tag --sort=-creatordate | head -n 1)
+          echo "Latest tag is $latest_tag"
+          echo "latest_tag=$latest_tag" >> ${GITHUB_ENV}
+          echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
+
+      - name: Checkout Push to Registry action
+        if: ${{ inputs.image-variant }} == 'Main'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ env.latest_tag }}
+
       - name: Prepare environment
         run: |
           # Lowercase the image uri
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
 
-      - name: Checkout Push to Registry action
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          ref: ${{ inputs.ref }}
-
       #- name: Maximize build space
       #  uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53
       #  with:
       #    remove-codeql: true
+
       - name: Mount BTRFS for podman storage
         uses: ublue-os/container-storage-action@main
 

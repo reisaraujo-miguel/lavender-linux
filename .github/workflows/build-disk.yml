@@ -10,6 +10,14 @@ on:
       - "./disk_config/disk.toml"
       - "./.github/workflows/build-iso.yml"
   workflow_dispatch:
+    inputs:
+      platform:
+        description: "platform to build for"
+        required: true
+        type: choice
+        options:
+          - amd64
+          - arm64
 
 env:
   DEFAULT_TAG: "latest"
@@ -17,9 +25,15 @@ env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}" # do not edit
   BIB_IMAGE: "ghcr.io/lorbuschris/bootc-image-builder:20250608" # "quay.io/centos-bootc/bootc-image-builder:latest" - see https://github.com/osbuild/bootc-image-builder/pull/954
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   build-image:
-    uses: ./.github/workflows/build-image-main.yml
+    uses: ./.github/workflows/build.yml
+    with:
+      image-variant: "Main"
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     permissions:
