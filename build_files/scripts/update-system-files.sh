@@ -29,7 +29,7 @@ replace_line() {
 SCHEMAS_FOLDER=/usr/share/glib-2.0/schemas/
 
 replace_line "$SCHEMAS_FOLDER/zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
-	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'org.gnome.Ptyxis.desktop']"
+	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'com.mitchellh.ghostty.desktop']"
 
 replace_line "$SCHEMAS_FOLDER/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
 	"enabled-extensions = ['gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com', 'caffeine@patapon.info', 'tilingshell@ferrarodomenico.com']"
@@ -48,6 +48,3 @@ glib-compile-schemas "$SCHEMAS_FOLDER"
 # Setup dotfiles
 git clone https://github.com/reisaraujo-miguel/dotfiles.git /tmp/dotfiles
 bash /tmp/dotfiles/install.sh -c --no-backup -d /etc/skel -e nvim
-
-# consolidate just files
-find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
