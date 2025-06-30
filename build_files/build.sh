@@ -6,6 +6,8 @@ set -ouex pipefail
 export RELEASE
 RELEASE="$(rpm -E %fedora)"
 
+export BUILD_FILES_DIR="/ctx/"
+
 # Validate environment
 [[ -z "$RELEASE" ]] && {
     echo "Failed to determine Fedora release"
@@ -15,7 +17,7 @@ RELEASE="$(rpm -E %fedora)"
 # Helper Functions
 execute_script() {
     local script="$1"
-    local script_path="/ctx/scripts/${script}"
+    local script_path="$BUILD_FILES_DIR/scripts/${script}"
 
     if [[ ! -x "$script_path" ]]; then
         echo "Error: Script ${script} not found or not executable"
@@ -60,11 +62,11 @@ main() {
     echo "::endgroup::"
 
     echo "::group:: === Install Extra Packages ==="
-    install_packages "/ctx/extra-packages"
+    install_packages "$BUILD_FILES_DIR/extra-pkgs"
     echo "::endgroup::"
 
     echo "::group:: === Remove Unwanted Packages ==="
-    remove_packages "/ctx/remove-pkgs"
+    remove_packages "$BUILD_FILES_DIR/remove-pkgs"
     echo "::endgroup::"
 
     echo "::group:: === Configure Desktop Environment ==="
