@@ -164,7 +164,7 @@ jobs:
             --compression-format=zstd
 
       # Sign container image with Cosign
-      - uses: sigstore/cosign-installer@fb28c2b6339dcd94da6e4cbcbc5e888961f6f8c3
+      - uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
