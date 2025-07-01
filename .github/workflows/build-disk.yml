@@ -120,7 +120,7 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          sudo apt install go
+          sudo apt-get install golang
 
           git_chglog="github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4"
 
