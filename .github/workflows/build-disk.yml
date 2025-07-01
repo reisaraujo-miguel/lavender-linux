@@ -120,6 +120,8 @@ jobs:
 
       - name: Generate Changelog
         run: |
+          sudo apt install go
+
           git_chglog="github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.4"
 
           go run $git_chglog -o changelog.md --silent ${{ env.release_ver }}
