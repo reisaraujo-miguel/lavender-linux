@@ -31,6 +31,7 @@ concurrency:
 
 jobs:
   build-image:
+    if: github.event_name != 'workflow_dispatch'
     uses: ./.github/workflows/build.yml
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
