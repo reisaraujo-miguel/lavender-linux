@@ -43,7 +43,7 @@ jobs:
   build-iso:
     name: Build ISOs
     needs: build-image
-    runs-on: ${{ inputs.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
+    runs-on: ${{ inputs.platform != 'arm64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     strategy:
       fail-fast: false
       matrix:
