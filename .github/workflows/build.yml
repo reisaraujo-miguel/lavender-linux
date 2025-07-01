@@ -3,10 +3,6 @@ name: Build Image
 
 on:
   workflow_call:
-    inputs:
-      image-variant:
-        required: true
-        type: string
     secrets:
       SIGNING_SECRET:
         required: false
@@ -68,13 +64,13 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Checkout Repository
-        if: inputs.image-variant == 'Main'
+        if: inputs.image-variant != 'Devel'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
 
       - name: Fetch Latest Release Tag
-        if: inputs.image-variant == 'Main'
+        if: inputs.image-variant != 'Devel'
         run: |
           latest_tag=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest tag is $latest_tag"
@@ -82,7 +78,7 @@ jobs:
           echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
 
       - name: Checkout Push to Registry action
-        if: inputs.image-variant == 'Main'
+        if: inputs.image-variant != 'Devel'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ env.latest_tag }}

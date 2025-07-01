@@ -32,8 +32,6 @@ concurrency:
 jobs:
   build-image:
     uses: ./.github/workflows/build.yml
-    with:
-      image-variant: "Main"
     secrets:
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     permissions:
