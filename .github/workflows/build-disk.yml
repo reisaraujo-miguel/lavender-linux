@@ -131,7 +131,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Create Release
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
+        uses: softprops/action-gh-release@62c96d0c4e8a889135c1f3a25910db8dbe0e85f7
         if: github.event_name != 'workflow_dispatch'
         with:
           tag_name: ${{ env.release_ver }}
