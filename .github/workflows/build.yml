@@ -7,8 +7,6 @@ on:
       SIGNING_SECRET:
         required: false
   pull_request:
-    branches:
-      - main
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC everyday
   push:

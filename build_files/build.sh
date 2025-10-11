@@ -34,8 +34,8 @@ execute_script() {
 install_packages() {
     local pkg_file="$1"
 
-    # Read packages, filtering out comment lines (starting with #)
-    mapfile -t packages < <(grep -v '^#' "$pkg_file")
+    # Read packages, filtering out comment (starting with #) and blank lines
+    mapfile -t packages < <(grep -v '^#\|^$' "$pkg_file")
 
     if dnf5 -y install "${packages[@]}" --allowerasing; then
         return 0
@@ -47,7 +47,8 @@ install_packages() {
 remove_packages() {
     local pkg_file="$1"
 
-    mapfile -t packages < <(grep -v '^#' "$pkg_file")
+    # Read packages, filtering out comment (starting with #) and blank lines
+    mapfile -t packages < <(grep -v '^#\|^$' "$pkg_file")
 
     if dnf5 -y remove "${packages[@]}"; then
         return 0
