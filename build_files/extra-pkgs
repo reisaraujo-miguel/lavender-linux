@@ -1,7 +1,28 @@
-ghostty
-ghostty-bash-completion
-ghostty-shell-integration
-ghostty-zsh-completion
+# shell
+zsh-autosuggestions
+zsh-syntax-highlighting
+bat
+bat-extras
+
+# eye candy
 starship
 morewaita-icon-theme
-temurin-17-jdk
+jetbrains-mono-fonts-all
+
+# dev tools
+neovim
+lazygit
+git-delta
+git-crypt
+
+# dev dependencies
+temurin-25-jdk
+nodejs
+luarocks
+golang
+cargo
+gcc
+g++
+libomp-devel
+perf
+binutils-gprofng
