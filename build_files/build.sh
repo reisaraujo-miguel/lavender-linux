@@ -34,7 +34,8 @@ execute_script() {
 install_packages() {
     local pkg_file="$1"
 
-    mapfile -t packages <"$pkg_file"
+    # Read packages, filtering out comment lines (starting with #)
+    mapfile -t packages < <(grep -v '^#' "$pkg_file")
 
     if dnf5 -y install "${packages[@]}" --allowerasing; then
         return 0
@@ -46,7 +47,7 @@ install_packages() {
 remove_packages() {
     local pkg_file="$1"
 
-    mapfile -t packages <"$pkg_file"
+    mapfile -t packages < <(grep -v '^#' "$pkg_file")
 
     if dnf5 -y remove "${packages[@]}"; then
         return 0
@@ -71,10 +72,6 @@ main() {
 
     echo "::group:: === Configure Desktop Environment ==="
     execute_script "update-system-files.sh"
-    echo "::endgroup::"
-
-    echo "::group:: === Configure Ghostty ==="
-    execute_script "configure-ghostty.sh"
     echo "::endgroup::"
 
     echo "::group:: === Unset Extra Repos ==="
