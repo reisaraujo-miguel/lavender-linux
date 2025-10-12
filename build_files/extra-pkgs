@@ -3,6 +3,7 @@ zsh-autosuggestions
 zsh-syntax-highlighting
 bat
 bat-extras
+eza
 
 # eye candy
 starship
