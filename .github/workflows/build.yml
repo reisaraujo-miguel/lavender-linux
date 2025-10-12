@@ -64,13 +64,13 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Checkout Repository
-        if: inputs.image-variant != 'Devel'
+        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           fetch-depth: 0
 
       - name: Fetch Latest Release Tag
-        if: inputs.image-variant != 'Devel'
+        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
         run: |
           latest_tag=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest tag is $latest_tag"
@@ -78,7 +78,7 @@ jobs:
           echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
 
       - name: Checkout Push to Registry action
-        if: inputs.image-variant != 'Devel'
+        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{ env.latest_tag }}
@@ -177,7 +177,7 @@ jobs:
       #
       - name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
-        if: github.event_name != 'pull_request'
+        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -185,7 +185,7 @@ jobs:
 
       - name: Push Image to GHCR
         uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c
-        if: github.event_name != 'pull_request'
+        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
         id: push
         env:
           REGISTRY_USER: ${{ github.actor }}
@@ -199,10 +199,10 @@ jobs:
 
       # Sign container image with Cosign
       - uses: sigstore/cosign-installer@d7543c93d881b35a8faa02e8e3605f69b7a1ce62
-        if: github.event_name != 'pull_request'
+        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
 
       - name: Sign container image
-        if: github.event_name != 'pull_request'
+        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
         run: |
           IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           for tag in ${{ steps.metadata.outputs.tags }}; do
