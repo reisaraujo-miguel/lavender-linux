@@ -24,7 +24,7 @@ on:
         type: choice
         options:
           - Devel
-          - Main
+          - Stable
       ref:
         required: false
         type: string
@@ -41,6 +41,7 @@ env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}" # do not edit
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4" # You should put your own image here so that you get a fancy profile image on https://artifacthub.io/!
   DEFAULT_TAG: "latest"
+  IMAGE_VARIANT: "devel"
 
 jobs:
   build_push:
@@ -56,21 +57,26 @@ jobs:
       image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
       digest: ${{ steps.push.outputs.digest }}
 
-    steps:
+    steps: 
+      - name: Set Image Variant to Stable
+        if: (github.event_name == 'workflow_call') || (inputs.image-variant == 'Stable')
+        run: |
+          echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
+
       - name: Checkout Push to Registry action
-        if: (inputs.image-variant == 'Devel') || (github.event_name == 'pull_request') || (github.event_name == 'push')
+        if: env.IMAGE_VARIANT == 'devel'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{ inputs.ref }}
 
       - name: Checkout Repository
-        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: env.IMAGE_VARIANT == 'stable'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           fetch-depth: 0
 
       - name: Fetch Latest Release Tag
-        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: env.IMAGE_VARIANT == 'stable'
         run: |
           latest_tag=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest tag is $latest_tag"
@@ -78,7 +84,7 @@ jobs:
           echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
 
       - name: Checkout Push to Registry action
-        if: (inputs.image-variant != 'Devel') && (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: env.IMAGE_VARIANT == 'stable'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{ env.latest_tag }}
