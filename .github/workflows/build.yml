@@ -64,19 +64,19 @@ jobs:
           echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
 
       - name: Checkout Push to Registry action
-        if: env.IMAGE_VARIANT == devel
+        if: env.IMAGE_VARIANT == 'devel'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{ inputs.ref }}
 
       - name: Checkout Repository
-        if: env.IMAGE_VARIANT == stable
+        if: env.IMAGE_VARIANT == 'stable'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           fetch-depth: 0
 
       - name: Fetch Latest Release Tag
-        if: env.IMAGE_VARIANT == stable
+        if: env.IMAGE_VARIANT == 'stable'
         run: |
           latest_tag=$(git tag --sort=-creatordate | head -n 1)
           echo "Latest tag is $latest_tag"
@@ -84,7 +84,7 @@ jobs:
           echo "IMAGE_NAME=${{ github.event.repository.name }}" >> ${GITHUB_ENV} # remove "devel" from the name
 
       - name: Checkout Push to Registry action
-        if: env.IMAGE_VARIANT == stable
+        if: env.IMAGE_VARIANT == 'stable'
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{ env.latest_tag }}
