@@ -18,6 +18,7 @@ git-crypt
 # dev dependencies
 temurin-25-jdk
 nodejs
+bun
 luarocks
 golang
 cargo
