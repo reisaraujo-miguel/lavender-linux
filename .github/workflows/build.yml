@@ -41,7 +41,6 @@ env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}" # do not edit
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4" # You should put your own image here so that you get a fancy profile image on https://artifacthub.io/!
   DEFAULT_TAG: "latest"
-  IMAGE_VARIANT: "devel"
 
 jobs:
   build_push:
@@ -57,11 +56,15 @@ jobs:
       image: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}
       digest: ${{ steps.push.outputs.digest }}
 
-    steps: 
-      - name: Set Image Variant to Stable
-        if: (github.event_name == 'workflow_call') || (inputs.image-variant == 'Stable')
+    steps:
+      - name: Set Image Variant
         run: |
-          echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
+          # Default to devel unless workflow_call or explicitly set to Stable
+          if [[ "${{ github.event_name }}" == "workflow_call" || "${{ inputs.image-variant }}" == "Stable" ]]; then
+            echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
+          else
+            echo "IMAGE_VARIANT=devel" >> ${GITHUB_ENV}
+          fi
 
       - name: Checkout Push to Registry action
         if: env.IMAGE_VARIANT == 'devel'
