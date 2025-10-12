@@ -189,7 +189,7 @@ jobs:
       #
       - name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
-        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: github.event_name != 'pull_request'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -197,7 +197,7 @@ jobs:
 
       - name: Push Image to GHCR
         uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c
-        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: github.event_name != 'pull_request'
         id: push
         env:
           REGISTRY_USER: ${{ github.actor }}
@@ -211,10 +211,10 @@ jobs:
 
       # Sign container image with Cosign
       - uses: sigstore/cosign-installer@d7543c93d881b35a8faa02e8e3605f69b7a1ce62
-        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: github.event_name != 'pull_request'
 
       - name: Sign container image
-        if: (github.event_name != 'pull_request') && (github.event_name != 'push')
+        if: github.event_name != 'pull_request'
         run: |
           IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           for tag in ${{ steps.metadata.outputs.tags }}; do
