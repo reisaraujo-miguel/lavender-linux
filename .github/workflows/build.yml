@@ -63,7 +63,7 @@ jobs:
       - name: Set Image Variant
         run: |
           # Default to devel unless workflow_call or explicitly set to Stable
-          if [[ "${{ inputs.set-stable }}" == true || "${{ inputs.image-variant }}" == "Stable" ]]; then
+          if [[ "${{ inputs.set-stable }}" == true || "${{ inputs.image-variant }}" == "Stable" || "${{ github.event_name }}" == "schedule" ]]; then
             echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
           else
             echo "IMAGE_VARIANT=devel" >> ${GITHUB_ENV}
