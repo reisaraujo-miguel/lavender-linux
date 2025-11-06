@@ -6,7 +6,14 @@
 
 Lavender Linux is Bazzite-DX with some extra things
 
-- _Temurin JDK 17:_ To build android packages with Godot
-- _Ghostty:_ As a replacement for Ptyxis
 - _MoreWaita Icon Theme:_ For more adwaita style Icons
 - _Vanilla Gnome:_ Removes some bazzite customizations
+- _Several Dev Runtimes and Dependencies:_ temurin-25-jdk, bun, node, rust, golang etc.
+- _Eye Candy for Your Terminal:_ zsh-autosuggestion, zsh-syntax-highlighting, starship (terminal prompt), bat-extras, git-delta, jetbrains-mono, eza (ls replacement)
+- _Terminal Dev Tools:_ neovim and lazygit
+
+
+Rebase to this image from any Fedora SilverBlue based distro with:
+```bash
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/reisaraujo-miguel/lavender-linux:latest
+```
