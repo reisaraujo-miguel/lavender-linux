@@ -18,6 +18,9 @@ on:
         options:
           - amd64
           - arm64
+  schedule:
+    # Run once every month on the 1st day at 00:00 UTC
+    - cron: "0 0 1 * *"
 
 env:
   DEFAULT_TAG: "latest"
@@ -30,21 +33,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-image:
-    uses: ./.github/workflows/build.yml
-    with:
-      set-stable: true
-    secrets:
-      SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
-    permissions:
-      contents: write
-      packages: write
-      actions: read
-      id-token: write
-
   build-iso:
     name: Build ISOs
-    needs: build-image
     runs-on: ${{ inputs.platform != 'arm64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     strategy:
       fail-fast: false
@@ -102,7 +92,7 @@ jobs:
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           chown: ${{ env.USER_UID }}:${{ env.USER_GID }}
           types: ${{ matrix.disk-type }}
-          additional-args: --use-librepo=True --rootfs=btrfs
+          additional-args: --use-librepo=True
 
       - name: Upload ISOs and Checksum to Job Artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
