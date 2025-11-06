@@ -78,6 +78,8 @@ main() {
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
     echo "::endgroup::"
+
+    systemctl enable podman.socket
 }
 
 main
