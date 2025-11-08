@@ -63,6 +63,10 @@ main() {
     execute_script "set-extra-repos.sh"
     echo "::endgroup::"
 
+    echo "::group:: === Upgrade ==="
+    dnf5 -y upgrade
+    echo "::endgroup::"
+
     echo "::group:: === Install Extra Packages ==="
     install_packages "$BUILD_FILES_DIR/extra-pkgs"
     echo "::endgroup::"
@@ -78,8 +82,6 @@ main() {
     echo "::group:: === Unset Extra Repos ==="
     execute_script "unset-extra-repos.sh"
     echo "::endgroup::"
-
-    systemctl enable podman.socket
 }
 
 main
