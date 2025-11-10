@@ -2,13 +2,6 @@
 name: Build Release ISO
 
 on:
-  push:
-    tags:
-      - "v*"
-    paths:
-      - "./disk_config/iso.toml"
-      - "./disk_config/disk.toml"
-      - "./.github/workflows/build-iso.yml"
   workflow_dispatch:
     inputs:
       platform:
