@@ -2,23 +2,14 @@
 name: Build Image
 
 on:
-  workflow_call:
-    inputs:
-      set-stable:
-        type: boolean
-    secrets:
-      SIGNING_SECRET:
-        required: false
+  push:
+    tags:
+      - "v*"
   pull_request:
     branches:
       - main
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC everyday
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - "**/README.md"
   workflow_dispatch:
     inputs:
       image-variant:
@@ -62,8 +53,8 @@ jobs:
     steps:
       - name: Set Image Variant
         run: |
-          # Default to devel unless workflow_call or explicitly set to Stable
-          if [[ "${{ inputs.set-stable }}" == true || "${{ inputs.image-variant }}" == "Stable" || "${{ github.event_name }}" == "schedule" ]]; then
+          # Default to devel unless scheduled, explicitly set to Stable, or triggered by pushed tag
+          if [[ "${{ inputs.image-variant }}" == "Stable" || "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "push" ]]; then
             echo "IMAGE_VARIANT=stable" >> ${GITHUB_ENV}
           else
             echo "IMAGE_VARIANT=devel" >> ${GITHUB_ENV}
@@ -112,7 +103,7 @@ jobs:
 
       #  Fallback to the remove-unwanted-software-action if github doesn't allocate enough space
       #  See: https://github.com/ublue-os/container-storage-action/pull/11
-      
+
       #  continue-on-error: true
       #  with:
       #    target-dir: /var/lib/containers
