@@ -28,18 +28,23 @@ replace_line() {
 # Change some lines on gschema
 SCHEMAS_FOLDER=/usr/share/glib-2.0/schemas/
 
+# Dock Pinned Apps
 replace_line "$SCHEMAS_FOLDER/zz0-01-bazzite-desktop-silverblue-dash.gschema.override" "favorite-apps" \
-	"favorite-apps = ['org.mozilla.firefox.desktop', 'eu.betterbird.Betterbird.desktop', 'org.gnome.Nautilus.desktop', 'io.bassi.Amberol.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'com.mitchellh.ghostty.desktop']"
+	"favorite-apps = ['app.zen_browser.zen', 'org.gnome.Nautilus.desktop', 'io.github.kolunmi.Bazaar.desktop, 'org.gnome.Ptyxis.desktop'']"
 
+# Enabled Extensions
 replace_line "$SCHEMAS_FOLDER/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override" "enabled-extensions" \
-	"enabled-extensions = ['gsconnect@andyholmes.github.io', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com', 'caffeine@patapon.info', 'tilingshell@ferrarodomenico.com']"
+	"enabled-extensions = ['caffeine@patapon.info']"
 
+# Icons Theme
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "\[org.gnome.desktop.interface\]" \
 	"\[org.gnome.desktop.interface\]\nicon-theme=\"MoreWaita\""
 
+# Volume above 100
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "\[org.gnome.desktop.sound\]" \
 	"\[org.gnome.desktop.sound\]\nallow-volume-above-100-percent=true"
 
+# Button Layout
 replace_line "$SCHEMAS_FOLDER/zz0-04-bazzite-desktop-silverblue-theme.gschema.override" "button-layout" "button-layout=\":close\""
 
 # Compile schemas
